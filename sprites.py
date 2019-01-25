@@ -1,0 +1,33 @@
+import logging
+import sys
+import pymunk
+import pyxel
+from sprite import Sprite
+
+logger = logging.getLogger(__name__)
+logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
+
+
+class Player(Sprite):
+    """ test class """
+    def __init__(self, id, xpos, ypos, imagebank=0, spritesheet_xpos=48, spritesheet_ypos=0, width=16, height=16,
+                 spritesheet_keycol=13, mass=1, momentum=1, velocity=(0, 0), player_num=1):
+        spritesheet_ypos = spritesheet_ypos + ((player_num - 1) * height)
+        print(spritesheet_xpos, spritesheet_ypos)
+        super().__init__(id, xpos, ypos, imagebank, spritesheet_xpos, spritesheet_ypos, width, height,
+                         spritesheet_keycol, mass, momentum, velocity)
+
+        self.poly = pymunk.Circle(self.body, (self.width / 2), offset=(0, 0))
+
+    def draw(self):
+        if self.body.velocity != (0, 0):
+            logger.debug("{0} at {1} travelling at {2}".format(self.id, self.body.position, self.body.velocity))
+
+        pyxel.blt((self.body.position.x - (self.width / 2)),
+                  self.body.position.y - (self.height / 2),
+                  self.imagebank,
+                  self.spritesheet_xpos,
+                  self.spritesheet_ypos,
+                  self.width,
+                  self.height,
+                  self.spritesheet_keycol)

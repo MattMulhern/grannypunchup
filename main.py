@@ -17,7 +17,7 @@ class App:
     """ main class used for globals e.g. threading etc """
     def __init__(self):
         self.ctx = {"cur_frame": settings.starting_frame}
-        pyxel.init(settings.canvas_x, settings.canvas_y, palette=PALETTE, scale=3)
+        pyxel.init(settings.canvas_x, settings.canvas_y, palette=PALETTE, scale=settings.scale)
 
         # initialize all frames
         self.title = title.Title()
