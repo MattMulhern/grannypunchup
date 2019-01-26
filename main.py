@@ -1,6 +1,11 @@
 import pyxel
 import sys
 import logging
+import asyncio
+import threading
+from aiohttp import web
+import socketio
+
 
 import game
 import title
@@ -11,6 +16,8 @@ logger = logging.getLogger("main")
 logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 
 PALETTE = pyxel.DEFAULT_PALETTE
+sio = socketio.AsyncServer()
+loop = asyncio.get_event_loop()
 
 
 class App:
@@ -26,7 +33,7 @@ class App:
         logger.info("App initialized")
 
     def run(self):
-        pyxel.run(app.update, app.draw)
+        pyxel.run(self.update, self.draw)
 
     def update(self):
         """ checks for quit signal, then calls update() for current frame """
@@ -70,6 +77,40 @@ class App:
             sys.exit(1)
 
 
-if __name__ == '__main__':
-    app = App()
-    app.run()
+pyxel_app = App()
+
+""" start server """
+@sio.on('connect')
+def on_connect(sid, data):
+    pyxel_app.game.handle_connect_event(sid, data)
+
+@sio.on('press')
+def on_press(sid, data):
+    pyxel_app.game.handle_press_event(sid, data)
+
+@sio.on('release')
+def on_release(sid, data):
+    pyxel_app.game.handle_release_event(sid, data)
+
+
+def say_hello(request):
+    return web.Response(text='Hello, world')
+
+
+server_app = web.Application()
+sio.attach(server_app)
+server_app.add_routes([web.get('/', say_hello)])
+handler = server_app.make_handler()
+server = loop.create_server(handler, host='0.0.0.0', port=8080)
+
+
+def aiohttp_server():
+    loop.run_until_complete(server)
+    loop.run_forever()
+
+
+server_thread = threading.Thread(target=aiohttp_server)
+""" end server """
+
+server_thread.start()
+pyxel_app.run()

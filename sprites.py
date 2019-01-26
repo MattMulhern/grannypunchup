@@ -84,4 +84,20 @@ class Enemy(Sprite):
         self.player_num = player_num
 
     def update(self):
-            print('Enemy update')
+        pass
+
+    def handlepress(self, buttonName):
+        if buttonName == 'up':
+            self.body.apply_impulse_at_local_point((0, -10), (0, 0))
+        elif buttonName == 'down':
+            self.body.apply_impulse_at_local_point((0, 10), (0, 0))
+        elif buttonName == 'right':
+            self.body.apply_impulse_at_local_point((10, 0), (0, 0))
+        elif buttonName == 'left':
+            self.body.apply_impulse_at_local_point((-10, 0), (0, 0))
+        elif buttonName == 'a':
+            pass
+        elif buttonName == 'b':
+            pass
+        else:
+            logger.error(f"enemy {sid} got bad buttonName {buttonName}")        
