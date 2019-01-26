@@ -5,3 +5,4 @@ phys_dt = 0.02
 scale = 5
 max_enemies = 50
 space_damping = 0.0
+sprite_anim_modulo = 8
