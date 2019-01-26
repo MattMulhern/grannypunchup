@@ -5,14 +5,14 @@ import pyxel
 import settings
 
 logger = logging.getLogger(__name__)
-logging.basicConfig(stream=sys.stdout, level=logging.INFO)
+logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 
 
 class Sprite:
     """ Base Sprite clas. """
     def __init__(self,
                  id, xpos, ypos,
-                 imagebank, spritesheet_positions, width, height, spritesheet_keycol,
+                 imagebank, spritesheet_positions, attack_sprite_position, width, height, spritesheet_keycol,
                  mass, momentum, velocity):
         self.id = id
         self.xpos0 = xpos
@@ -30,10 +30,17 @@ class Sprite:
         self.body.velocity = velocity
         self.body.spriteid = id
         self.spritesheet_idx = 0
+        self.attack_frames = 0
+        self.attack_sprite_position = attack_sprite_position
 
     def die(self):
         """ for later animation use, should be overloaded """
         pass
+
+    def is_attacking(self):
+        if self.attack_frames > 0:
+            return True
+        return False
 
     def draw(self):
         if self.body.velocity != (0, 0):
@@ -41,11 +48,15 @@ class Sprite:
                                                                     self.body.position.x,
                                                                     self.body.position.y,
                                                                     self.body.velocity))
+        if self.is_attacking():
+            logger.debug(f"{self.id} is attacking [{self.attack_frames}]")
+            self.attack_frames -= 1
 
         width = self.width
         if self.facing == 'left':
             width *= -1
         s_position = self.spritesheet_positions[self.spritesheet_idx]
+
         pyxel.blt((self.body.position.x - (self.width / 2)),
                   self.body.position.y - (self.height / 2),
                   self.imagebank,
@@ -58,14 +69,18 @@ class Sprite:
 
 class Player(Sprite):
     """ Gamepad player class """
-    def __init__(self, id, xpos, ypos, imagebank=0, spritesheet_positions=[(48, 0), (48, 16)], width=16, height=16,
+    def __init__(self, id, xpos, ypos, imagebank=0,
+                 spritesheet_positions=[(48, 0), (48, 16)], attack_sprite_position=(48, 0), width=16, height=16,
                  spritesheet_keycol=0, mass=1, momentum=1, velocity=(0, 0), player_num=1):
-        super().__init__(id, xpos, ypos, imagebank, spritesheet_positions, width, height,
+        # spritesheet_ypos = spritesheet_ypos + ((player_num - 1) * height)
+        super().__init__(id, xpos, ypos, imagebank, spritesheet_positions, attack_sprite_position, width, height,
                          spritesheet_keycol, mass, momentum, velocity)
 
         self.poly = pymunk.Circle(self.body, (self.width / 2), offset=(0, 0))
+        self.poly.collision_type = 1
         self.player_num = player_num
         self.facing = 'right'
+        self.attack_length = settings.player_attack_length
 
     def update(self):
         num = self.player_num
@@ -86,15 +101,22 @@ class Player(Sprite):
         if pyxel.btn(pyxel.KEY_LEFT) or pyxel.btn(getattr(pyxel, f"GAMEPAD_{num}_LEFT")):
             self.facing = 'left'
             self.body.apply_impulse_at_local_point((-veldiff, 0), (0, 0))
+        if pyxel.btn(pyxel.KEY_A) or pyxel.btn(getattr(pyxel, f"GAMEPAD_{num}_A")):
+            logger.error(f"{self.id} attacking!")
+            self.attack_frames += self.attack_length
+
 
 class Enemy(Sprite):
     """ Gamepad player class """
-    def __init__(self, id, xpos, ypos, imagebank=0, spritesheet_positions=[(64, 64)], width=16, height=16,
+    def __init__(self, id, xpos, ypos, imagebank=0,
+                 spritesheet_positions=[(64, 64)], attack_sprite_position=(64, 64), width=16, height=16,
                  spritesheet_keycol=0, mass=1, momentum=1, velocity=(0, 0), player_num=1):
-        super().__init__(id, xpos, ypos, imagebank, spritesheet_positions, width, height,
+        # spritesheet_ypos = spritesheet_ypos + ((player_num - 1) * height)
+        super().__init__(id, xpos, ypos, imagebank, spritesheet_positions, attack_sprite_position, width, height,
                          spritesheet_keycol, mass, momentum, velocity)
 
         self.poly = pymunk.Circle(self.body, (self.width / 2), offset=(0, 0))
+        self.poly.collision_type = 1
         self.player_num = player_num
         self.facing = 'left'
 
@@ -113,6 +135,6 @@ class Enemy(Sprite):
             self.body.apply_impulse_at_local_point((-10, 0), (0, 0))
             self.facing = 'left'
         elif buttonName == 'a':
-            pass
+            self.attack_frames += self.attack_length
         elif buttonName == 'b':
-            pass
+            self.useitem()

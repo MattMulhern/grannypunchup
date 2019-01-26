@@ -6,3 +6,7 @@ scale = 5
 max_enemies = 50
 space_damping = 0.0
 sprite_anim_modulo = 8
+player_veldiff = 100
+enemy_veldiff = 100
+enemy_attack_length = 2
+player_attack_length = 2

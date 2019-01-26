@@ -81,8 +81,6 @@ class App:
 
 pyxel_app = App()
 
-""" start server """
-
 
 @sio.on('connect')
 def on_connect(sid, data):
@@ -122,7 +120,6 @@ def aiohttp_server():
 
 
 server_thread = threading.Thread(target=aiohttp_server)
-""" end server """
 
 server_thread.start()
 pyxel_app.run()

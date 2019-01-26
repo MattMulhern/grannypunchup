@@ -3,7 +3,6 @@ import logging
 import sys
 import pyxel
 import settings
-import pytmx
 import csv
 
 from sprites import Player, Enemy
@@ -40,6 +39,10 @@ class Game:
         """ gravity, canvas etc """
         self.phys = pymunk.Space()
         self.phys.damping = settings.space_damping
+        self.phys.add_collision_handler(1, 1)
+
+    def resolve_attack(space, arbiter):
+        print("resolve attack!")
 
     def draw_level(self):
         with open('assets/Level.csv') as csv_map:
@@ -50,7 +53,6 @@ class Game:
                 for value in row[0:32]:
                     y = (int(value) // 32)
                     x = (int(value) % 32)
-                    print(x_pos, y_pos, x * 8, y * 8)
                     pyxel.blt(x_pos, y_pos, 1, x * 8, y * 8, 8, 8, 14)
                     x_pos += 8
                 y_pos += 8
