@@ -19,11 +19,7 @@ class Game:
                         Player("Betrice", 50, 50, velocity=(0, 0), player_num=2),
                         Player("Candice", 50, 50, velocity=(0, 0), player_num=3),
                         Player("Derp", 50, 50, velocity=(0, 0), player_num=4)]
-            
-        # self.enemies = [Enemy("Adolf", 100, 50, velocity=(0, 0)),
-        #                 Enemy("Jean Claude Grand Ma", 100, 50, velocity=(0, 0)),
-        #                 Enemy("Cunt ripper", 100, 50, velocity=(0, 0)),
-        #                 Enemy("Dick cheese", 100, 50, velocity=(0, 0))]
+
         self.enemies = {}
 
         pyxel.tilemap(0).set(
@@ -36,14 +32,14 @@ class Game:
     def _init_space(self):
         """ gravity, canvas etc """
         self.phys = pymunk.Space()
+        self.phys.damping = settings.space_damping
 
     def update(self):
         """ update game objects """
-        # print(self.space.bodies)
         for player in self.players:
             player.update()
-        # for enemy in self.enemies.values():
-        #     enemy.update()
+        for enemy in self.enemies.values():
+            enemy.update()
         self.phys.step(settings.phys_dt)
 
     def draw(self):
@@ -54,7 +50,7 @@ class Game:
         for enemy in self.enemies.values():
             enemy.draw()
         # pyxel.bltm(0, 0, 0, 0, 0, 100, 100, 0)
-    
+
     def handle_connect_event(self, sid, data):
         if len(self.enemies.keys()) > settings.max_enemies:
             logger.error('reached enemy limit, ignoring request')

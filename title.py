@@ -12,7 +12,7 @@ class Title:
         logger.info("title initialized.")
 
     def update(self):
-        logger.debug("title.update()")
+        # logger.debug("title.update()")
         pass
 
     def draw(self):
