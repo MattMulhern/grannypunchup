@@ -16,13 +16,10 @@ class Game:
         pyxel.image(0).load(0, 0, "assets/villagers.png")
         self.space = self._init_space()
         logger.info("game initialized.")
-        self.players = [Player("Anna", 50, 50, velocity=(0, 0), player_num=1),
-                        Player("Betrice", 50, 50, velocity=(
-                            0, 0), player_num=2),
-                        Player("Candice", 50, 50, velocity=(
-                            0, 0), player_num=3),
-                        Player("Derp", 50, 50, velocity=(0, 0), player_num=4)]
-
+        self.players = {"Anna": Player("Anna", 50, 50, velocity=(0, 0), player_num=1),
+                        "Betrice": Player("Betrice", 50, 50, velocity=(0, 0), player_num=2),
+                        "Candice": Player("Candice", 50, 50, velocity=(0, 0), player_num=3),
+                        "Derp": Player("Derp", 50, 50, velocity=(0, 0), player_num=4)}
         self.enemies = {}
 
         self.new_enemies = []
@@ -32,7 +29,7 @@ class Game:
                    "4203202122030001020360", "0202020401006061620040"], 0
         )
 
-        for player in self.players:
+        for player in self.players.values():
             self.phys.add(player.body, player.poly)
 
     def _init_space(self):
@@ -50,7 +47,7 @@ class Game:
             self.enemies[sid] = newEnemy
             self.phys.add(newEnemy.body,  newEnemy.poly)
         """ update game objects """
-        for player in self.players:
+        for player in self.players.values():
             player.update()
         for enemy in self.enemies.values():
             enemy.update()
@@ -59,7 +56,7 @@ class Game:
     def draw(self):
         """ draw game to canvas """
         pyxel.text(10, 5, "Granny Punch Up", 14)
-        for player in self.players:
+        for player in self.players.values():
             player.draw()
         for enemy in self.enemies.values():
             enemy.draw()
@@ -86,3 +83,11 @@ class Game:
 
     def handle_release_event(self, sid, data):
         pass
+
+    def kill(self, obj):
+        obj.die()
+        if isinstance(obj, Player):
+            del(self.players[obj.id])
+        elif isinstance(obj, Enemy):
+            del(self.enemies[obj.id])
+        self.phys.remove(obj.body)

@@ -28,6 +28,11 @@ class Sprite:
         self.body = pymunk.Body(self.mass, self.momentum)
         self.body.position = self.xpos0, self.ypos0
         self.body.velocity = velocity
+        self.body.spriteid = id
+    
+    def die(self):
+        """ for later animation use, should be overloaded """
+        pass
 
     def draw(self):
         if self.body.velocity != (0, 0):
