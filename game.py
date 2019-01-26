@@ -19,6 +19,9 @@ class Game:
                         Player("Betrice", 50, 50, velocity=(0, 0), player_num=2),
                         Player("Candice", 50, 50, velocity=(0, 0), player_num=3),
                         Player("Derp", 50, 50, velocity=(0, 0), player_num=4)]
+        pyxel.tilemap(0).set(
+            0, 0, ["0202020401006061620040", "4203202122030001020360", "0202020401006061620040"], 0
+        )
 
         for player in self.players:
             self.phys.add(player.body, player.poly)
@@ -38,3 +41,4 @@ class Game:
         pyxel.text(10, 5, "Granny Punch Up", 14)
         for player in self.players:
             player.draw()
+        pyxel.bltm(0, 0, 0, 0, 0, 100, 100, 0)
