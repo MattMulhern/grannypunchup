@@ -29,6 +29,7 @@ class Sprite:
         self.body.position = self.xpos0, self.ypos0
         self.body.velocity = velocity
         self.body.spriteid = id
+
     
     def die(self):
         """ for later animation use, should be overloaded """
@@ -41,12 +42,15 @@ class Sprite:
                                                                     self.body.position.y,
                                                                     self.body.velocity))
 
+        width = self.width
+        if self.facing == 'left':
+            width *= -1
         pyxel.blt((self.body.position.x - (self.width / 2)),
                   self.body.position.y - (self.height / 2),
                   self.imagebank,
                   self.spritesheet_xpos,
                   self.spritesheet_ypos,
-                  self.width,
+                  width,
                   self.height,
                   self.spritesheet_keycol)
 
@@ -61,6 +65,7 @@ class Player(Sprite):
 
         self.poly = pymunk.Circle(self.body, (self.width / 2), offset=(0, 0))
         self.player_num = player_num
+        self.facing = 'right'
 
     def update(self):
         num = self.player_num
@@ -70,8 +75,10 @@ class Player(Sprite):
         if pyxel.btn(pyxel.KEY_DOWN) or pyxel.btn(getattr(pyxel, f"GAMEPAD_{num}_DOWN")):
             self.body.apply_impulse_at_local_point((0, veldiff), (0, 0))
         if pyxel.btn(pyxel.KEY_RIGHT) or pyxel.btn(getattr(pyxel, f"GAMEPAD_{num}_RIGHT")):
+            self.facing = 'right'
             self.body.apply_impulse_at_local_point((veldiff, 0), (0, 0))
         if pyxel.btn(pyxel.KEY_LEFT) or pyxel.btn(getattr(pyxel, f"GAMEPAD_{num}_LEFT")):
+            self.facing = 'left'
             self.body.apply_impulse_at_local_point((-veldiff, 0), (0, 0))
 
 
@@ -85,6 +92,7 @@ class Enemy(Sprite):
 
         self.poly = pymunk.Circle(self.body, (self.width / 2), offset=(0, 0))
         self.player_num = player_num
+        self.facing = 'left'
 
     def update(self):
         pass
@@ -96,8 +104,10 @@ class Enemy(Sprite):
             self.body.apply_impulse_at_local_point((0, 10), (0, 0))
         elif buttonName == 'right':
             self.body.apply_impulse_at_local_point((10, 0), (0, 0))
+            self.facing = 'right'
         elif buttonName == 'left':
             self.body.apply_impulse_at_local_point((-10, 0), (0, 0))
+            self.facing = 'left'
         elif buttonName == 'a':
             pass
         elif buttonName == 'b':
