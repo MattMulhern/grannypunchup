@@ -125,8 +125,11 @@ class Game:
             return
         self.enemies[sid].handlepress(buttonName)
 
-    def handle_release_event(self, sid, data):
-        pass
+    def handle_release_event(self, sid, buttonName):
+        if sid not in self.enemies.keys():
+            logger.error(f"unrecognised release event from {sid}, ignoring")
+            return
+        self.enemies[sid].handlerelease(buttonName)
 
     def kill(self, obj):
         obj.die()

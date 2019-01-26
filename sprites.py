@@ -88,6 +88,7 @@ class Player(Sprite):
         self.facing = 'right'
         self.attack_length = settings.player_attack_length
         self.attack_power = settings.player_attack_power
+        self.veldiff = settings.player_veldiff
 
     def update(self):
         num = self.player_num
@@ -99,15 +100,15 @@ class Player(Sprite):
                 self.spritesheet_idx += 1
 
         if pyxel.btn(pyxel.KEY_UP) or pyxel.btn(getattr(pyxel, f"GAMEPAD_{num}_UP")):
-            self.body.apply_impulse_at_local_point((0, - veldiff), (0, 0))
+            self.body.apply_impulse_at_local_point((0, - self.veldiff), (0, 0))
         if pyxel.btn(pyxel.KEY_DOWN) or pyxel.btn(getattr(pyxel, f"GAMEPAD_{num}_DOWN")):
-            self.body.apply_impulse_at_local_point((0, veldiff), (0, 0))
+            self.body.apply_impulse_at_local_point((0, self.veldiff), (0, 0))
         if pyxel.btn(pyxel.KEY_RIGHT) or pyxel.btn(getattr(pyxel, f"GAMEPAD_{num}_RIGHT")):
             self.facing = 'right'
-            self.body.apply_impulse_at_local_point((veldiff, 0), (0, 0))
+            self.body.apply_impulse_at_local_point((self.veldiff, 0), (0, 0))
         if pyxel.btn(pyxel.KEY_LEFT) or pyxel.btn(getattr(pyxel, f"GAMEPAD_{num}_LEFT")):
             self.facing = 'left'
-            self.body.apply_impulse_at_local_point((-veldiff, 0), (0, 0))
+            self.body.apply_impulse_at_local_point((-self.veldiff, 0), (0, 0))
         if pyxel.btn(pyxel.KEY_A) or pyxel.btn(getattr(pyxel, f"GAMEPAD_{num}_A")):
             logger.error(f"{self.id} attacking!")
             self.attack_frames += self.attack_length
@@ -130,22 +131,43 @@ class Enemy(Sprite):
         self.facing = 'left'
         self.attack_power = settings.enemy_attack_power
         self.attack_length = settings.enemy_attack_length
+        self.btn_ctx = {'up': False, 'down': False, 'left': False, 'right': False, 'a': False, 'b': False}
+        self.veldiff = settings.enemy_veldiff
 
     def update(self):
-        pass
+        if self.btn_ctx['up']:
+            self.body.apply_impulse_at_local_point((0, -self.veldiff), (0, 0))
+        if self.btn_ctx['down']:
+            self.body.apply_impulse_at_local_point((0, self.veldiff), (0, 0))
+        if self.btn_ctx['right']:
+            self.body.apply_impulse_at_local_point((self.veldiff, 0), (0, 0))
+        if self.btn_ctx['left']:
+            self.body.apply_impulse_at_local_point((-self.veldiff, 0), (0, 0))
 
     def handlepress(self, buttonName):
         if buttonName == 'up':
-            self.body.apply_impulse_at_local_point((0, -10), (0, 0))
+            self.btn_ctx['up'] = True
         elif buttonName == 'down':
-            self.body.apply_impulse_at_local_point((0, 10), (0, 0))
+            self.btn_ctx['down'] = True
         elif buttonName == 'right':
-            self.body.apply_impulse_at_local_point((10, 0), (0, 0))
+            self.btn_ctx['right'] = True
             self.facing = 'right'
         elif buttonName == 'left':
-            self.body.apply_impulse_at_local_point((-10, 0), (0, 0))
+            self.btn_ctx['left'] = True
             self.facing = 'left'
         elif buttonName == 'a':
             self.attack_frames += self.attack_length
         elif buttonName == 'b':
             self.useitem()
+
+    def handlerelease(self, buttonName):
+        if buttonName == 'up':
+            self.btn_ctx['up'] = False
+        elif buttonName == 'down':
+            self.btn_ctx['down'] = False
+        elif buttonName == 'right':
+            self.btn_ctx['right'] = False
+            self.facing = 'right'
+        elif buttonName == 'left':
+            self.btn_ctx['left'] = False
+            self.facing = 'left'
