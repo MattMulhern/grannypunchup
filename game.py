@@ -24,10 +24,10 @@ def resolve_player_collision(arbiter, space, data):
 class Game:
     """ Class used for game """
 
-    def __init__(self):
+    def __init__(self, fps=1):
         pyxel.image(0).load(0, 0, "assets/villagers.png")
         pyxel.image(1).load(0, 0, "assets/16X16-export.png")
-        self.space = self._init_space()
+        self._init_space()
         logger.info("game initialized.")
         self.players = {"Anna": Player("Anna", 50, 100, velocity=(0, 0), player_num=1),
                         "Betrice": Player("Betrice", 10, 100, velocity=(0, 0), player_num=2),
@@ -37,33 +37,37 @@ class Game:
 
         self.new_enemies = []
 
-        pyxel.tilemap(0).set(
-            0, 0, ["0202020401006061620040",
-                   "4203202122030001020360", "0202020401006061620040"], 0
-        )
-
         for player in self.players.values():
-            self.phys.add(player.body, player.poly)
+            self.space.add(player.body, player.poly)
 
     def _init_space(self):
         """ gravity, canvas etc """
-        self.phys = pymunk.Space()
-        self.phys.damping = settings.space_damping
-        self.colhandler = self.phys.add_collision_handler(1, 1)
+        self.space = pymunk.Space()
+        self.space.damping = settings.space_damping
+        self.colhandler = self.space.add_collision_handler(1, 1)
         self.colhandler.post_solve = resolve_player_collision
+        self.space.damping = settings.space_damping
 
-    def draw_level(self):
-        with open('assets/Level.csv') as csv_map:
+    def draw_csv(self, csv_file, offset):
+        with open(csv_file) as csv_map:
             csv_reader = csv.reader(csv_map, delimiter=',')
             y_pos = 0
             for row in csv_reader:
                 x_pos = 0
-                for value in row[0:32]:
+                for value in row[0 + offset:32 + offset]:
+
                     y = (int(value) // 32)
                     x = (int(value) % 32)
-                    pyxel.blt(x_pos, y_pos, 1, x * 8, y * 8, 8, 8, 14)
+                    pyxel.blt(x_pos, y_pos, 1, x * 8, y * 8, 8, 8, 0)
                     x_pos += 8
                 y_pos += 8
+
+    def draw_level(self):
+        offset = pyxel.frame_count // 15
+        self.draw_csv('assets/Level_floor.csv', offset)
+        self.draw_csv('assets/Level_walls.csv', offset)
+        self.draw_csv('assets/Level_carpet.csv', offset)
+        self.draw_csv('assets/Level_objects.csv', offset)
 
     def update(self):
         self.flushingEnemies = True
@@ -73,7 +77,7 @@ class Game:
 
         for (sid, newEnemy) in enemies:
             self.enemies[sid] = newEnemy
-            self.phys.add(newEnemy.body,  newEnemy.poly)
+            self.space.add(newEnemy.body,  newEnemy.poly)
         """ update game objects """
         objs_to_kill = []
         for player in self.players.values():
@@ -87,11 +91,12 @@ class Game:
 
         for obj in objs_to_kill:
             self.kill(obj)
-        self.phys.step(settings.phys_dt)
+        self.space.step(settings.space_dt)
 
     def draw(self):
         """ draw game to canvas """
         pyxel.text(10, 5, "Granny Punch Up", 14)
+        pyxel.cls(0)
         self.draw_level()
         for player in self.players.values():
             player.draw()
@@ -126,4 +131,4 @@ class Game:
             del(self.players[obj.id])
         elif isinstance(obj, Enemy):
             del(self.enemies[obj.id])
-        self.phys.remove(obj.body)
+        self.space.remove(obj.body)
