@@ -22,9 +22,11 @@ loop = asyncio.get_event_loop()
 
 class App:
     """ main class used for globals e.g. threading etc """
+
     def __init__(self):
         self.ctx = {"cur_frame": settings.starting_frame}
-        pyxel.init(settings.canvas_x, settings.canvas_y, palette=PALETTE, scale=settings.scale)
+        pyxel.init(settings.canvas_x, settings.canvas_y,
+                   palette=PALETTE, scale=settings.scale)
 
         # initialize all frames
         self.title = title.Title()
@@ -80,17 +82,27 @@ class App:
 pyxel_app = App()
 
 """ start server """
+
+
 @sio.on('connect')
 def on_connect(sid, data):
-    pyxel_app.game.handle_connect_event(sid, data)
+    # pyxel_app.game.handle_connect_event(sid, data)
+    pass
+
 
 @sio.on('press')
 def on_press(sid, data):
     pyxel_app.game.handle_press_event(sid, data)
 
+
 @sio.on('release')
 def on_release(sid, data):
     pyxel_app.game.handle_release_event(sid, data)
+
+
+@sio.on('ready')
+def on_ready(sid, data):
+    pyxel_app.game.handle_connect_event(sid, data)
 
 
 def say_hello(request):
