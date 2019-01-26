@@ -27,10 +27,6 @@ class Game:
                             0, 0), player_num=3),
                         Player("Derp", 50, 50, velocity=(0, 0), player_num=4)]
 
-        # self.enemies = [Enemy("Adolf", 100, 50, velocity=(0, 0)),
-        #                 Enemy("Jean Claude Grand Ma", 100, 50, velocity=(0, 0)),
-        #                 Enemy("Cunt ripper", 100, 50, velocity=(0, 0)),
-        #                 Enemy("Dick cheese", 100, 50, velocity=(0, 0))]
         self.enemies = {}
 
         self.new_enemies = []
@@ -46,6 +42,7 @@ class Game:
     def _init_space(self):
         """ gravity, canvas etc """
         self.phys = pymunk.Space()
+        self.phys.damping = settings.space_damping
 
     def update(self):
         self.flushingEnemies = True
@@ -57,11 +54,10 @@ class Game:
             self.enemies[sid] = newEnemy
             self.phys.add(newEnemy.body,  newEnemy.poly)
         """ update game objects """
-        # print(self.space.bodies)
         for player in self.players:
             player.update()
-        # for enemy in self.enemies.values():
-        #     enemy.update()
+        for enemy in self.enemies.values():
+            enemy.update()
         self.phys.step(settings.phys_dt)
 
     def draw(self):
