@@ -14,10 +14,12 @@ logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 def resolve_player_collision(arbiter, space, data):
     sprite_a = arbiter.shapes[0].body.sprite
     sprite_b = arbiter.shapes[1].body.sprite
-    logger.debug(f"{sprite_a.id} is colliding with {sprite_b.id}")
+    # logger.debug(f"{sprite_a.id} is colliding with {sprite_b.id}")
     if sprite_a.is_attacking():
+        logger.info(f"{sprite_a.id} hit {sprite_b.id} for {sprite_a.attack_power}, {sprite_b.health} left")
         sprite_b.health -= sprite_a.attack_power
     if sprite_b.is_attacking():
+        logger.info(f"{sprite_b.id} hit {sprite_a.id} for {sprite_b.attack_power}, {sprite_a.health} left")
         sprite_a.health -= sprite_b.attack_power
 
 
@@ -87,7 +89,7 @@ class Game:
         for enemy in self.enemies.values():
             enemy.update()
             if enemy.health <= 0:
-                objs_to_kill.append(player)
+                objs_to_kill.append(enemy)
 
         for obj in objs_to_kill:
             self.kill(obj)
@@ -104,13 +106,14 @@ class Game:
             enemy.draw()
 
     def handle_connect_event(self, sid, data):
+        logger.debug(f"handling connect for {sid}")
         if len(self.enemies.keys()) > settings.max_enemies:
             logger.error('reached enemy limit, ignoring request')
         else:
             self.add_new_enemy(sid, data)
 
     def add_new_enemy(self, sid, data):
-        newEnemy = Enemy("Network Adolf", 100, 50, velocity=(0, 0))
+        newEnemy = Enemy(sid, 100, 50, velocity=(0, 0))
         # self.enemies[sid] = data
         while self.flushingEnemies:
             pass

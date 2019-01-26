@@ -8,7 +8,8 @@ space_damping = 0.0
 sprite_anim_modulo = 8
 player_veldiff = 100
 enemy_veldiff = 100
+
 enemy_attack_length = 2
 player_attack_length = 2
-player_attack_power = 30
-enemy_attack_power = 10
+player_attack_power = 5
+enemy_attack_power = 5

@@ -82,10 +82,9 @@ class App:
 pyxel_app = App()
 
 
-@sio.on('connect')
-def on_connect(sid, data):
-    # pyxel_app.game.handle_connect_event(sid, data)
-    pass
+# @sio.on('connect')
+# def on_connect(sid, data):
+#     pyxel_app.game.handle_connect_event(sid, data)
 
 
 @sio.on('press')

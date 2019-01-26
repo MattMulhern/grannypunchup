@@ -34,6 +34,7 @@ class Sprite:
         self.attack_frames = 0
         self.attack_sprite_position = attack_sprite_position
         self.health = 100
+        self.equipped = 'nothing'
 
     def die(self):
         """ for later animation use, should be overloaded """
@@ -67,6 +68,9 @@ class Sprite:
                   width,
                   self.height,
                   self.spritesheet_keycol)
+
+    def useitem(self):
+        logger.info(f"{self.id} uses {self.equipped}!")
 
 
 class Player(Sprite):
@@ -107,6 +111,8 @@ class Player(Sprite):
         if pyxel.btn(pyxel.KEY_A) or pyxel.btn(getattr(pyxel, f"GAMEPAD_{num}_A")):
             logger.error(f"{self.id} attacking!")
             self.attack_frames += self.attack_length
+        if pyxel.btn(pyxel.KEY_B) or pyxel.btn(getattr(pyxel, f"GAMEPAD_{num}_B")):
+            self.useitem()
 
 
 class Enemy(Sprite):
@@ -123,6 +129,7 @@ class Enemy(Sprite):
         self.player_num = player_num
         self.facing = 'left'
         self.attack_power = settings.enemy_attack_power
+        self.attack_length = settings.enemy_attack_length
 
     def update(self):
         pass
