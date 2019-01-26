@@ -29,6 +29,8 @@ class Game:
 
     def update(self):
         """ update game objects """
+        for player in self.players:
+            player.update()
         self.phys.step(settings.phys_dt)
 
     def draw(self):
