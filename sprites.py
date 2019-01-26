@@ -60,14 +60,28 @@ class Sprite:
             width *= -1
         s_position = self.spritesheet_positions[self.spritesheet_idx]
 
-        pyxel.blt((self.body.position.x - (self.width / 2)),
-                  self.body.position.y - (self.height / 2),
+        # pyxel.blt((self.body.position.x - (self.width / 2)),
+        #           self.body.position.y - (self.height / 2),
+        pyxel.blt(self.body.position.x,
+                  self.body.position.y,
                   self.imagebank,
                   s_position[0],
                   s_position[1],
                   width,
                   self.height,
                   self.spritesheet_keycol)
+        if self.health > 80:
+            rect_col = 11
+        elif self.health > 40:
+            rect_col = 9
+        else:
+            rect_col = 8
+
+        pyxel.rect(self.body.position.x,
+                   self.body.position.y - 1,
+                   self.body.position.x + ((self.width / 100) * self.health),
+                   self.body.position.y, 
+                   rect_col)
 
     def useitem(self):
         logger.info(f"{self.id} uses {self.equipped}!")
@@ -92,7 +106,6 @@ class Player(Sprite):
 
     def update(self):
         num = self.player_num
-        veldiff = 100
         if pyxel.frame_count % settings.sprite_anim_modulo == 0:
             if self.spritesheet_idx == (len(self.spritesheet_positions) - 1):
                 self.spritesheet_idx = 0
