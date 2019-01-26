@@ -33,6 +33,7 @@ class Sprite:
         self.spritesheet_idx = 0
         self.attack_frames = 0
         self.attack_sprite_position = attack_sprite_position
+        self.health = 100
 
     def die(self):
         """ for later animation use, should be overloaded """
@@ -82,6 +83,7 @@ class Player(Sprite):
         self.player_num = player_num
         self.facing = 'right'
         self.attack_length = settings.player_attack_length
+        self.attack_power = settings.player_attack_power
 
     def update(self):
         num = self.player_num
@@ -120,6 +122,7 @@ class Enemy(Sprite):
         self.poly.collision_type = 1
         self.player_num = player_num
         self.facing = 'left'
+        self.attack_power = settings.enemy_attack_power
 
     def update(self):
         pass

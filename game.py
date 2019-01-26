@@ -15,6 +15,10 @@ def resolve_player_collision(arbiter, space, data):
     sprite_a = arbiter.shapes[0].body.sprite
     sprite_b = arbiter.shapes[1].body.sprite
     logger.debug(f"{sprite_a.id} is colliding with {sprite_b.id}")
+    if sprite_a.is_attacking():
+        sprite_b.health -= sprite_a.attack_power
+    if sprite_b.is_attacking():
+        sprite_a.health -= sprite_b.attack_power
 
 
 class Game:
@@ -71,10 +75,18 @@ class Game:
             self.enemies[sid] = newEnemy
             self.phys.add(newEnemy.body,  newEnemy.poly)
         """ update game objects """
+        objs_to_kill = []
         for player in self.players.values():
             player.update()
+            if player.health <= 0:
+                objs_to_kill.append(player)
         for enemy in self.enemies.values():
             enemy.update()
+            if enemy.health <= 0:
+                objs_to_kill.append(player)
+
+        for obj in objs_to_kill:
+            self.kill(obj)
         self.phys.step(settings.phys_dt)
 
     def draw(self):
