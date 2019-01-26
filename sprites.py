@@ -26,6 +26,7 @@ class Sprite:
         self.momentum = momentum
 
         self.body = pymunk.Body(self.mass, self.momentum)
+        self.body.sprite = self
         self.body.position = self.xpos0, self.ypos0
         self.body.velocity = velocity
         self.body.spriteid = id
@@ -76,7 +77,7 @@ class Player(Sprite):
         super().__init__(id, xpos, ypos, imagebank, spritesheet_positions, attack_sprite_position, width, height,
                          spritesheet_keycol, mass, momentum, velocity)
 
-        self.poly = pymunk.Circle(self.body, (self.width / 2), offset=(0, 0))
+        self.poly = pymunk.Circle(self.body, (self.width / 4), offset=(0, 0))
         self.poly.collision_type = 1
         self.player_num = player_num
         self.facing = 'right'

@@ -11,6 +11,12 @@ logger = logging.getLogger(__name__)
 logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 
 
+def resolve_player_collision(arbiter, space, data):
+    sprite_a = arbiter.shapes[0].body.sprite
+    sprite_b = arbiter.shapes[1].body.sprite
+    logger.debug(f"{sprite_a.id} is colliding with {sprite_b.id}")
+
+
 class Game:
     """ Class used for game """
 
@@ -19,10 +25,10 @@ class Game:
         pyxel.image(1).load(0, 0, "assets/16X16-export.png")
         self.space = self._init_space()
         logger.info("game initialized.")
-        self.players = {"Anna": Player("Anna", 50, 50, velocity=(0, 0), player_num=1),
-                        "Betrice": Player("Betrice", 50, 50, velocity=(0, 0), player_num=2),
-                        "Candice": Player("Candice", 50, 50, velocity=(0, 0), player_num=3),
-                        "Derp": Player("Derp", 50, 50, velocity=(0, 0), player_num=4)}
+        self.players = {"Anna": Player("Anna", 50, 100, velocity=(0, 0), player_num=1),
+                        "Betrice": Player("Betrice", 10, 100, velocity=(0, 0), player_num=2),
+                        "Candice": Player("Candice", 100, 10, velocity=(0, 0), player_num=3),
+                        "Derp": Player("Derp", 100, 50, velocity=(0, 0), player_num=4)}
         self.enemies = {}
 
         self.new_enemies = []
@@ -39,10 +45,8 @@ class Game:
         """ gravity, canvas etc """
         self.phys = pymunk.Space()
         self.phys.damping = settings.space_damping
-        self.phys.add_collision_handler(1, 1)
-
-    def resolve_attack(space, arbiter):
-        print("resolve attack!")
+        self.colhandler = self.phys.add_collision_handler(1, 1)
+        self.colhandler.post_solve = resolve_player_collision
 
     def draw_level(self):
         with open('assets/Level.csv') as csv_map:
