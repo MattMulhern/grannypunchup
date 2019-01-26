@@ -16,13 +16,9 @@ class Game:
         pyxel.image(0).load(0, 0, "assets/villagers.png")
         self.space = self._init_space()
         logger.info("game initialized.")
-        logger.warn('Adding', sid, newEnemy)
-        self.players = [Player("Anna", 5
-                               logger.warn('Adding', sid, newEnemy)er_num=1),
-                        Player("Betrice"
-                               logger.warn('Adding', sid, newEnemy)
-                               0, 0), playe
-                        logger.warn('Adding', sid, newEnemy)
+        self.players = [Player("Anna", 50, 50, velocity=(0, 0), player_num=1),
+                        Player("Betrice", 50, 50, velocity=(
+                            0, 0), player_num=2),
                         Player("Candice", 50, 50, velocity=(
                             0, 0), player_num=3),
                         Player("Derp", 50, 50, velocity=(0, 0), player_num=4)]
