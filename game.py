@@ -3,6 +3,9 @@ import logging
 import sys
 import pyxel
 import settings
+import pytmx
+import csv
+
 from sprites import Player, Enemy
 
 logger = logging.getLogger(__name__)
@@ -14,6 +17,7 @@ class Game:
 
     def __init__(self):
         pyxel.image(0).load(0, 0, "assets/villagers.png")
+        pyxel.image(1).load(0, 0, "assets/16X16-export.png")
         self.space = self._init_space()
         logger.info("game initialized.")
         self.players = {"Anna": Player("Anna", 50, 50, velocity=(0, 0), player_num=1),
@@ -37,6 +41,20 @@ class Game:
         self.phys = pymunk.Space()
         self.phys.damping = settings.space_damping
 
+    def draw_level(self):
+        with open('assets/Level.csv') as csv_map:
+            csv_reader = csv.reader(csv_map, delimiter=',')
+            y_pos = 0
+            for row in csv_reader:
+                x_pos = 0
+                for value in row[0:32]:
+                    y = (int(value) // 32)
+                    x = (int(value) % 32)
+                    print(x_pos, y_pos, x * 8, y * 8)
+                    pyxel.blt(x_pos, y_pos, 1, x * 8, y * 8, 8, 8, 14)
+                    x_pos += 8
+                y_pos += 8
+
     def update(self):
         self.flushingEnemies = True
         enemies = self.new_enemies
@@ -56,11 +74,11 @@ class Game:
     def draw(self):
         """ draw game to canvas """
         pyxel.text(10, 5, "Granny Punch Up", 14)
+        self.draw_level()
         for player in self.players.values():
             player.draw()
         for enemy in self.enemies.values():
             enemy.draw()
-        # pyxel.bltm(0, 0, 0, 0, 0, 100, 100, 0)
 
     def handle_connect_event(self, sid, data):
         if len(self.enemies.keys()) > settings.max_enemies:

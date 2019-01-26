@@ -5,7 +5,7 @@ import pyxel
 import settings
 
 logger = logging.getLogger(__name__)
-logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
+logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 
 
 class Sprite:
@@ -60,7 +60,6 @@ class Player(Sprite):
     """ Gamepad player class """
     def __init__(self, id, xpos, ypos, imagebank=0, spritesheet_positions=[(48, 0), (48, 16)], width=16, height=16,
                  spritesheet_keycol=0, mass=1, momentum=1, velocity=(0, 0), player_num=1):
-        # spritesheet_ypos = spritesheet_ypos + ((player_num - 1) * height)
         super().__init__(id, xpos, ypos, imagebank, spritesheet_positions, width, height,
                          spritesheet_keycol, mass, momentum, velocity)
 
@@ -88,12 +87,10 @@ class Player(Sprite):
             self.facing = 'left'
             self.body.apply_impulse_at_local_point((-veldiff, 0), (0, 0))
 
-
 class Enemy(Sprite):
     """ Gamepad player class """
     def __init__(self, id, xpos, ypos, imagebank=0, spritesheet_positions=[(64, 64)], width=16, height=16,
                  spritesheet_keycol=0, mass=1, momentum=1, velocity=(0, 0), player_num=1):
-        # spritesheet_ypos = spritesheet_ypos + ((player_num - 1) * height)
         super().__init__(id, xpos, ypos, imagebank, spritesheet_positions, width, height,
                          spritesheet_keycol, mass, momentum, velocity)
 
