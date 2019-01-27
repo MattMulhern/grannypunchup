@@ -64,13 +64,13 @@ class Game:
 
         logger.info("game initialized.")
         start_y = 50
-        self.players = {"Anna": Player("Anna", 53, start_y,
+        self.players = {"Anna": Player("Anna", 18, start_y,
                                        spritesheet_positions=[(0, 0)], velocity=(0, 0), player_num=1),
-                        "Betrice": Player("Betrice", 63, start_y,
+                        "Betrice": Player("Betrice", 48, start_y,
                                           spritesheet_positions=[(0, 48)], velocity=(0, 0), player_num=2),
-                        "Candice": Player("Candice", 110, start_y,
+                        "Candice": Player("Candice", 78, start_y,
                                           spritesheet_positions=[(0, 96)], velocity=(0, 0), player_num=3),
-                        "Derp": Player("Derp", 115, start_y,
+                        "Derp": Player("Derp", 108, start_y,
                                        spritesheet_positions=[(0, 144)], velocity=(0, 0), player_num=4)}
 
         self.dead_grannys = []
