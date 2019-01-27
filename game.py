@@ -6,8 +6,7 @@ import settings
 import csv
 import random
 
-# from sprites import Player, Enemy, Baby, Girl, Woman, Pregnant, Boy, Man, Granda
-from sprites import Player, Enemy, Baby
+from sprites import Player, Enemy, Baby, Girl, Woman, Pregnant, Boy, Man, Granda
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
@@ -193,25 +192,25 @@ class Game:
             self.add_new_enemy(sid, data)
 
     def add_new_enemy(self, sid, data):
-        class_list = ["Enemy"]
+        class_list = ["Enemy", "Baby", "Girl"]
         # class_list = ["Baby", "Girl", "Woman", "Pregnant", "Boy", "Man", "Granda"]
         enemy_class = random.choice(class_list)
         if enemy_class == "Player":
             newEnemy = Player(sid, 100, 50, velocity=(0, 0))
         elif enemy_class == "Enemy":
             newEnemy = Enemy(sid, 100, 50, velocity=(0, 0))
-        # elif enemy_class == "Baby":
-        #     newEnemy = Baby(sid, 100, 50, velocity=(0, 0))
-        # elif enemy_class == "Girl":
-        #     newEnemy = Girl(sid, 100, 50, velocity=(0, 0))
-        # elif enemy_class == "Woman":
-        #     newEnemy = Woman(sid, 100, 50, velocity=(0, 0))
-        # elif enemy_class == "Pregnant":
-        #     newEnemy = Pregnant(sid, 100, 50, velocity=(0, 0))
-        # elif enemy_class == "Boy":
-        #     newEnemy = Boy(sid, 100, 50, velocity=(0, 0))
-        # elif enemy_class == "Man":
-        #     newEnemy = Man(sid, 100, 50, velocity=(0, 0))
+        elif enemy_class == "Baby":
+            newEnemy = Baby(sid, 100, 50, velocity=(0, 0))
+        elif enemy_class == "Girl":
+            newEnemy = Girl(sid, 100, 50, velocity=(0, 0))
+        elif enemy_class == "Woman":
+            newEnemy = Woman(sid, 100, 50, velocity=(0, 0))
+        elif enemy_class == "Pregnant":
+            newEnemy = Pregnant(sid, 100, 50, velocity=(0, 0))
+        elif enemy_class == "Boy":
+            newEnemy = Boy(sid, 100, 50, velocity=(0, 0))
+        elif enemy_class == "Man":
+            newEnemy = Man(sid, 100, 50, velocity=(0, 0))
         # elif enemy_class == "Granda":
         #     newEnemy = Granda(sid, 100, 50, velocity=(0, 0))
         else:

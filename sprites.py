@@ -240,12 +240,11 @@ class Baby(Enemy):
         super().__init__(id, xpos, ypos, imagebank, spritesheet_positions, attack_sprite_position, width, height,
                          spritesheet_keycol, mass, momentum, velocity)
 
-        print(self.spritesheet_positions)
         self.poly = pymunk.Circle(self.body, (self.width / 2), offset=(0, 0))
         self.poly.collision_type = 1
         self.player_num = player_num
         self.facing = 'left'
-        self.attack_power = settings.enemy_attack_power
+        self.attack_power = settings.enemy_attack_power - 3
         self.attack_length = settings.enemy_attack_length
         self.btn_ctx = {'up': False, 'down': False, 'left': False, 'right': False, 'a': False, 'b': False}
         self.veldiff = settings.enemy_veldiff + 120
@@ -254,7 +253,7 @@ class Baby(Enemy):
 class Girl(Enemy):
     """ Gamepad player class """
     def __init__(self, id, xpos, ypos, imagebank=0,
-                 spritesheet_positions=[(32, 64)], attack_sprite_position=(64, 64), width=16, height=16,
+                 spritesheet_positions=[(16, 64)], attack_sprite_position=(64, 64), width=16, height=16,
                  spritesheet_keycol=0, mass=1, momentum=1, velocity=(0, 0), player_num=1):
         super().__init__(id, xpos, ypos, imagebank, spritesheet_positions, attack_sprite_position, width, height,
                          spritesheet_keycol, mass, momentum, velocity)
@@ -267,3 +266,93 @@ class Girl(Enemy):
         self.attack_length = settings.enemy_attack_length
         self.btn_ctx = {'up': False, 'down': False, 'left': False, 'right': False, 'a': False, 'b': False}
         self.veldiff = settings.enemy_veldiff + 70
+
+
+class Woman(Enemy):
+    """ Gamepad player class """
+    def __init__(self, id, xpos, ypos, imagebank=0,
+                 spritesheet_positions=[(32, 64)], attack_sprite_position=(64, 64), width=16, height=16,
+                 spritesheet_keycol=0, mass=1, momentum=1, velocity=(0, 0), player_num=1):
+        super().__init__(id, xpos, ypos, imagebank, spritesheet_positions, attack_sprite_position, width, height,
+                         spritesheet_keycol, mass, momentum, velocity)
+
+        self.poly = pymunk.Circle(self.body, (self.width / 2), offset=(0, 0))
+        self.poly.collision_type = 1
+        self.player_num = player_num
+        self.facing = 'left'
+        self.attack_power = settings.enemy_attack_power + 2
+        self.attack_length = settings.enemy_attack_length
+        self.btn_ctx = {'up': False, 'down': False, 'left': False, 'right': False, 'a': False, 'b': False}
+        self.veldiff = settings.enemy_veldiff + 70
+
+
+class Pregnant(Enemy):
+    """ Gamepad player class """
+    def __init__(self, id, xpos, ypos, imagebank=0,
+                 spritesheet_positions=[(64, 64)], attack_sprite_position=(64, 64), width=16, height=16,
+                 spritesheet_keycol=0, mass=1, momentum=1, velocity=(0, 0), player_num=1):
+        super().__init__(id, xpos, ypos, imagebank, spritesheet_positions, attack_sprite_position, width, height,
+                         spritesheet_keycol, mass, momentum, velocity)
+
+        self.poly = pymunk.Circle(self.body, (self.width / 2), offset=(0, 0))
+        self.poly.collision_type = 1
+        self.player_num = player_num
+        self.facing = 'left'
+        self.attack_power = settings.enemy_attack_power + 5
+        self.attack_length = settings.enemy_attack_length
+        self.btn_ctx = {'up': False, 'down': False, 'left': False, 'right': False, 'a': False, 'b': False}
+        self.veldiff = settings.enemy_veldiff - 30
+
+
+class Boy(Enemy):
+    """ Gamepad player class """
+    def __init__(self, id, xpos, ypos, imagebank=0,
+                 spritesheet_positions=[(80, 64)], attack_sprite_position=(64, 64), width=16, height=16,
+                 spritesheet_keycol=0, mass=1, momentum=1, velocity=(0, 0), player_num=1):
+        super().__init__(id, xpos, ypos, imagebank, spritesheet_positions, attack_sprite_position, width, height,
+                         spritesheet_keycol, mass, momentum, velocity)
+
+        self.poly = pymunk.Circle(self.body, (self.width / 2), offset=(0, 0))
+        self.poly.collision_type = 1
+        self.player_num = player_num
+        self.facing = 'left'
+        self.attack_power = settings.enemy_attack_power - 1
+        self.attack_length = settings.enemy_attack_length
+        self.btn_ctx = {'up': False, 'down': False, 'left': False, 'right': False, 'a': False, 'b': False}
+        self.veldiff = settings.enemy_veldiff + 100
+
+
+class Man(Enemy):
+    """ Gamepad player class """
+    def __init__(self, id, xpos, ypos, imagebank=0,
+                 spritesheet_positions=[(96, 64)], attack_sprite_position=(64, 64), width=16, height=16,
+                 spritesheet_keycol=0, mass=1, momentum=1, velocity=(0, 0), player_num=1):
+        super().__init__(id, xpos, ypos, imagebank, spritesheet_positions, attack_sprite_position, width, height,
+                         spritesheet_keycol, mass, momentum, velocity)
+
+        self.poly = pymunk.Circle(self.body, (self.width / 2), offset=(0, 0))
+        self.poly.collision_type = 1
+        self.player_num = player_num
+        self.facing = 'left'
+        self.attack_power = settings.enemy_attack_power + 3
+        self.attack_length = settings.enemy_attack_length
+        self.btn_ctx = {'up': False, 'down': False, 'left': False, 'right': False, 'a': False, 'b': False}
+        self.veldiff = settings.enemy_veldiff + 50
+
+
+class Granda(Enemy):
+    """ Gamepad player class """
+    def __init__(self, id, xpos, ypos, imagebank=0,
+                 spritesheet_positions=[(112, 64)], attack_sprite_position=(64, 64), width=16, height=16,
+                 spritesheet_keycol=0, mass=1, momentum=1, velocity=(0, 0), player_num=1):
+        super().__init__(id, xpos, ypos, imagebank, spritesheet_positions, attack_sprite_position, width, height,
+                         spritesheet_keycol, mass, momentum, velocity)
+
+        self.poly = pymunk.Circle(self.body, (self.width / 2), offset=(0, 0))
+        self.poly.collision_type = 1
+        self.player_num = player_num
+        self.facing = 'left'
+        self.attack_power = settings.enemy_attack_power + 3
+        self.attack_length = settings.enemy_attack_length
+        self.btn_ctx = {'up': False, 'down': False, 'left': False, 'right': False, 'a': False, 'b': False}
+        self.veldiff = settings.enemy_veldiff + 50
