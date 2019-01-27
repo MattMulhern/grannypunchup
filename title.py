@@ -10,6 +10,7 @@ class Title:
     """ Class used for game """
     def __init__(self):
         logger.info("title initialized.")
+        pyxel.image(2).load(0, 0, "assets/Title-export.png")
 
     def update(self):
         # logger.debug("title.update()")
@@ -17,4 +18,4 @@ class Title:
 
     def draw(self):
         """ draw title to canvas """
-        pyxel.text(10, 5, "title", 14)
+        pyxel.blt(0, 0, 2, 0, 0, 255, 128, 0)
