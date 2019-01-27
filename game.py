@@ -38,10 +38,16 @@ class Game:
             self.space.add(line)
 
         logger.info("game initialized.")
-        self.players = {"Anna": Player("Anna", 50, 100, velocity=(0, 0), player_num=1),
-                        "Betrice": Player("Betrice", 10, 100, velocity=(0, 0), player_num=2),
-                        "Candice": Player("Candice", 100, 10, velocity=(0, 0), player_num=3),
-                        "Derp": Player("Derp", 100, 50, velocity=(0, 0), player_num=4)}
+        self.players = {"Anna": Player("Anna", 50, 100,
+                                       spritesheet_positions=[(0, 0)], velocity=(0, 0), player_num=1),
+                        "Betrice": Player("Betrice", 10, 100,
+                                          spritesheet_positions=[(0, 48)], velocity=(0, 0), player_num=2),
+                        "Candice": Player("Candice", 100, 10,
+                                          spritesheet_positions=[(0, 96)], velocity=(0, 0), player_num=3),
+                        "Derp": Player("Derp", 100, 50,
+                                       spritesheet_positions=[(0, 144)], velocity=(0, 0), player_num=4)}
+
+        self.dead_grannys = []
         self.enemies = {}
 
         self.new_enemies = []
@@ -140,6 +146,7 @@ class Game:
     def kill(self, obj):
         obj.die()
         if isinstance(obj, Player):
+            self.dead_grannys.append(obj)  # track player deaths
             del(self.players[obj.id])
         elif isinstance(obj, Enemy):
             del(self.enemies[obj.id])

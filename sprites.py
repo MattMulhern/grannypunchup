@@ -80,7 +80,7 @@ class Sprite:
         pyxel.rect(self.body.position.x,
                    self.body.position.y - 1,
                    self.body.position.x + ((self.width / 100) * self.health),
-                   self.body.position.y, 
+                   self.body.position.y,
                    rect_col)
 
     def useitem(self):
@@ -90,9 +90,9 @@ class Sprite:
 class Player(Sprite):
     """ Gamepad player class """
     def __init__(self, id, xpos, ypos, imagebank=0,
-                 spritesheet_positions=[(48, 0), (48, 16)], attack_sprite_position=(48, 0), width=16, height=16,
+                 spritesheet_positions=[(0, 0)], attack_sprite_position=(0, 0), width=16, height=16,
                  spritesheet_keycol=0, mass=1, momentum=1, velocity=(0, 0), player_num=1):
-        # spritesheet_ypos = spritesheet_ypos + ((player_num - 1) * height)
+
         super().__init__(id, xpos, ypos, imagebank, spritesheet_positions, attack_sprite_position, width, height,
                          spritesheet_keycol, mass, momentum, velocity)
 
@@ -103,6 +103,15 @@ class Player(Sprite):
         self.attack_length = settings.player_attack_length
         self.attack_power = settings.player_attack_power
         self.veldiff = settings.player_veldiff
+
+        # add 2nd walking animation
+        walk_anim_2_y = self.spritesheet_positions[0][1] + self.height
+        walk_anim_2_x = self.spritesheet_positions[0][0]
+        self.spritesheet_positions.append((walk_anim_2_x, walk_anim_2_y))
+
+        attack_anim_x = self.spritesheet_positions[0][0]
+        attack_anim_y = self.spritesheet_positions[0][1] + (self.height * 2)
+        self.attack_sprite_position = (attack_anim_x, attack_anim_y)
 
     def update(self):
         num = self.player_num
