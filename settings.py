@@ -15,4 +15,4 @@ player_attack_length = 1
 player_attack_power = 5
 enemy_attack_power = 5
 
-death_duration = 3
+death_duration = 30
