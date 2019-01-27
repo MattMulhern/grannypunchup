@@ -35,7 +35,9 @@ class Sprite:
         self.attack_sprite_position = attack_sprite_position
         self.health = 100
         self.equipped = 'nothing'
-
+        self.death_frames = 0
+        self.dead = False
+    
     def die(self):
         """ for later animation use, should be overloaded """
         pass
@@ -46,6 +48,9 @@ class Sprite:
         return False
 
     def draw(self):
+        if self.dead:
+            return  # to be deleted in next frame
+
         if self.body.velocity != (0, 0):
             logger.debug("{0} at {1}, {2} travelling at {2}".format(self.id,
                                                                     self.body.position.x,
@@ -60,8 +65,19 @@ class Sprite:
             width *= -1
         s_position = self.spritesheet_positions[self.spritesheet_idx]
 
-        # pyxel.blt((self.body.position.x - (self.width / 2)),
-        #           self.body.position.y - (self.height / 2),
+        if self.death_frames > 0:
+            logger.debug(f"dead drawing {self.id}: {self.death_frames}: {self.dead}")
+            pyxel.blt(self.body.position.x,
+                      self.body.position.y,
+                      self.imagebank,
+                      self.spritesheet_death_position[0],
+                      self.spritesheet_death_position[1],
+                      width,
+                      self.height,
+                      self.spritesheet_keycol)
+
+            return
+
         pyxel.blt(self.body.position.x,
                   self.body.position.y,
                   self.imagebank,
@@ -103,6 +119,10 @@ class Player(Sprite):
         self.attack_length = settings.player_attack_length
         self.attack_power = settings.player_attack_power
         self.veldiff = settings.player_veldiff
+        
+        dpos_x = self.spritesheet_positions[0][0] + self.width  # TODO: fix for where they really are!
+        dpos_y = self.spritesheet_positions[0][1]  # TODO: fix for where they really are!
+        self.spritesheet_death_position = (dpos_x, dpos_y)
 
         # add 2nd walking animation
         walk_anim_2_y = self.spritesheet_positions[0][1] + self.height
@@ -155,6 +175,10 @@ class Enemy(Sprite):
         self.attack_length = settings.enemy_attack_length
         self.btn_ctx = {'up': False, 'down': False, 'left': False, 'right': False, 'a': False, 'b': False}
         self.veldiff = settings.enemy_veldiff
+
+        dpos_x = self.spritesheet_positions[0][0] + self.width  # TODO: fix for where they really are!
+        dpos_y = self.spritesheet_positions[0][1]  # TODO: fix for where they really are!
+        self.spritesheet_death_position = (dpos_x, dpos_y)
 
     def update(self):
         if self.btn_ctx['up']:

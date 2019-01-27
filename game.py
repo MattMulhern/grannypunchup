@@ -14,14 +14,18 @@ logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 def resolve_player_collision(arbiter, space, data):
     sprite_a = arbiter.shapes[0].body.sprite
     sprite_b = arbiter.shapes[1].body.sprite
-    logger.debug(f"{sprite_a.id} is colliding with {sprite_b.id}")
+    if sprite_a.death_frames > 0 or sprite_b.death_frames > 0:
+        return
+    if sprite_a.dead or sprite_b.dead:
+        return
+
+    # logger.debug(f"{sprite_a.id} is colliding with {sprite_b.id}")
     if sprite_a.is_attacking():
         logger.info(f"{sprite_a.id} hit {sprite_b.id} for {sprite_a.attack_power}, {sprite_b.health} left")
         sprite_b.health -= sprite_a.attack_power
     if sprite_b.is_attacking():
         logger.info(f"{sprite_b.id} hit {sprite_a.id} for {sprite_b.attack_power}, {sprite_a.health} left")
         sprite_a.health -= sprite_b.attack_power
-
 
 class Game:
     """ Class used for game """
@@ -81,7 +85,7 @@ class Game:
             objs_to_kill.append(enemy)
 
         for obj in objs_to_kill:
-            self.kill(obj)    
+            self.kill(obj)
         self.dead_grannys = []
         pyxel.frame_count = 0
         self.__init__()
@@ -124,16 +128,36 @@ class Game:
         objs_to_kill = []
         for player in self.players.values():
             player.update()
-            if player.health <= 0:
+            if player.dead:
+                logger.debug(f"{player.id} is dead!")
                 objs_to_kill.append(player)
+            elif player.death_frames > 0:
+                logger.debug(f"{player.id} is dying! {player.death_frames}")
+                player.death_frames -= 1
+                if player.death_frames <= 0:
+                    logger.debug(f"{player.id} TRUE DEATH! {player.death_frames}")
+                    player.dead = True
+            elif player.health <= 0:
+                player.death_frames = settings.death_duration
         for enemy in self.enemies.values():
             enemy.update()
-            if enemy.health <= 0:
+            if enemy.dead:
+                logger.debug(f"{enemy.id} is dead!")
                 objs_to_kill.append(enemy)
+            elif enemy.death_frames > 0:
+                logger.debug(f"{enemy.id} is dying! {enemy.death_frames}")
+                enemy.death_frames -= 1
+                if enemy.death_frames <= 0:
+                    logger.debug(f"{enemy.id} TRUE DEATH! {enemy.death_frames}")
+                    enemy.dead = True
+            elif enemy.health <= 0:
+                enemy.death_frames = settings.death_duration
 
         for obj in objs_to_kill:
             self.kill(obj)
+
         self.space.step(settings.space_dt)
+        logger.debug(f"BODIES:{self.space.bodies}")
 
     def draw(self):
         """ draw game to canvas """
@@ -148,7 +172,7 @@ class Game:
     def handle_disconnect_event(self, sid):
         if sid in self.enemies.keys():
             self.kill(self.enemies[sid])
-        
+
     def handle_connect_event(self, sid, data):
         logger.debug(f"handling connect for {sid}")
         if len(self.enemies.keys()) > settings.max_enemies:
@@ -176,6 +200,7 @@ class Game:
         self.enemies[sid].handlerelease(buttonName)
 
     def kill(self, obj):
+        logger.debug(f"game killing {obj.id}")
         obj.die()
         if isinstance(obj, Player):
             self.dead_grannys.append(obj)  # track player deaths
