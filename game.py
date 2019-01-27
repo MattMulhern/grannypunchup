@@ -83,6 +83,7 @@ class Game:
 
         self.boss_fight = False
         self.boss_dead = False
+        self.running = False
 
     def _init_space(self):
         """ gravity, canvas etc """
@@ -178,8 +179,10 @@ class Game:
         self.space.step(settings.space_dt)
         logger.debug(f"BODIES:{self.space.bodies}")
 
-        if len(self.enemies) < settings.required_enemies:
+        if (len(self.enemies) < settings.required_enemies) and not self.running:
             pyxel.frame_count = 0
+        else:
+            self.running = True
 
     def draw(self):
         """ draw game to canvas """
