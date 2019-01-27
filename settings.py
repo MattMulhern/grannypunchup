@@ -18,3 +18,4 @@ required_enemies = 1
 
 death_duration = 30
 det_wall_dmg = 0.5
+player_max_health = 500

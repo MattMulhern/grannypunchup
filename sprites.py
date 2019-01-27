@@ -14,7 +14,7 @@ class Sprite:
     def __init__(self,
                  id, xpos, ypos,
                  imagebank, spritesheet_positions, attack_sprite_position, width, height, spritesheet_keycol,
-                 mass, momentum, velocity):
+                 mass, momentum, velocity, max_health):
         self.id = id
         self.xpos0 = xpos
         self.ypos0 = ypos
@@ -34,7 +34,8 @@ class Sprite:
         self.spritesheet_idx = 0
         self.attack_frames = 0
         self.attack_sprite_position = attack_sprite_position
-        self.health = 100
+        self.max_health = max_health
+        self.health = max_health
         self.equipped = 'nothing'
         self.death_frames = 0
         self.dead = False
@@ -87,16 +88,17 @@ class Sprite:
                   width,
                   self.height,
                   self.spritesheet_keycol)
-        if self.health > 80:
+
+        if (self.health / self.max_health) > 0.7:
             rect_col = 11
-        elif self.health > 40:
+        elif (self.health / self.max_health) > 0.4:
             rect_col = 9
         else:
             rect_col = 8
 
         pyxel.rect(self.body.position.x,
                    self.body.position.y - 1,
-                   self.body.position.x + ((self.width / 100) * self.health),
+                   self.body.position.x + ((self.width / self.max_health) * self.health),
                    self.body.position.y,
                    rect_col)
 
@@ -108,10 +110,10 @@ class Player(Sprite):
     """ Gamepad player class """
     def __init__(self, id, xpos, ypos, imagebank=0,
                  spritesheet_positions=[(0, 0)], attack_sprite_position=(0, 0), width=16, height=16,
-                 spritesheet_keycol=0, mass=1, momentum=1, velocity=(0, 0), player_num=1):
+                 spritesheet_keycol=0, mass=1, momentum=1, velocity=(0, 0), player_num=1, max_health=settings.player_max_health):
 
         super().__init__(id, xpos, ypos, imagebank, spritesheet_positions, attack_sprite_position, width, height,
-                         spritesheet_keycol, mass, momentum, velocity)
+                         spritesheet_keycol, mass, momentum, velocity, max_health)
 
         self.poly = pymunk.Circle(self.body, (self.width / 4), offset=(0, 0))
         self.poly.collision_type = 1
@@ -153,7 +155,6 @@ class Player(Sprite):
             self.facing = 'left'
             self.body.apply_impulse_at_local_point((-self.veldiff, 0), (0, 0))
         if pyxel.btn(pyxel.KEY_A) or pyxel.btn(getattr(pyxel, f"GAMEPAD_{num}_A")):
-            logger.error(f"{self.id} attacking!")
             self.attack_frames = self.attack_length
         if pyxel.btn(pyxel.KEY_B) or pyxel.btn(getattr(pyxel, f"GAMEPAD_{num}_B")):
             self.useitem()
@@ -163,10 +164,10 @@ class Enemy(Sprite):
     """ Gamepad player class """
     def __init__(self, id, xpos, ypos, imagebank=0,
                  spritesheet_positions=[(64, 64)], attack_sprite_position=(64, 64), width=16, height=16,
-                 spritesheet_keycol=0, mass=1, momentum=1, velocity=(0, 0), player_num=1):
+                 spritesheet_keycol=0, mass=1, momentum=1, velocity=(0, 0), player_num=1, max_health=100):
         # spritesheet_ypos = spritesheet_ypos + ((player_num - 1) * height)
         super().__init__(id, xpos, ypos, imagebank, spritesheet_positions, attack_sprite_position, width, height,
-                         spritesheet_keycol, mass, momentum, velocity)
+                         spritesheet_keycol, mass, momentum, velocity, max_health)
 
         self.poly = pymunk.Circle(self.body, (self.width / 2), offset=(0, 0))
         self.poly.collision_type = 1
