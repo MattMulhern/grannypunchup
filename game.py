@@ -142,7 +142,7 @@ class Game:
             logger.debug("BOSS_FIGHT!")
         if pyxel.btnp(pyxel.KEY_Z):
             self.boss_fight = True
-        
+
         self.flushingEnemies = True
         enemies = self.new_enemies
         self.new_enemies = []
@@ -156,6 +156,7 @@ class Game:
         for player in self.players.values():
             player.update(boss_dead=self.boss_dead)
             if player.dead:
+                pyxel.play(2, 2)
                 logger.debug(f"{player.id} is dead!")
                 objs_to_kill.append(player)
             elif player.death_frames > 0:
@@ -169,6 +170,7 @@ class Game:
         for enemy in self.enemies.values():
             enemy.update()
             if enemy.dead and isinstance(enemy, Boss):
+                pyxel.play(2, 2)
                 logger.debug(f"{enemy.id} is dead!")
                 objs_to_kill.append(enemy)
             elif enemy.death_frames > 0:
@@ -245,12 +247,12 @@ class Game:
             logger.error('reached enemy limit, ignoring request')
         else:
             self.add_new_enemy(sid, data)
-    
+
     # def add_boss(self):
     #     self.boss = Boss("Supervisor", 100, 100, spritesheet_positions=[(0, 0)], velocity=(0, 0))
     #     self.boss_added = True
     #     self.space.add(self.boss.body, self.boss.poly)
-        
+
     def add_new_enemy(self, sid, data):
         class_list = ["Baby", "Girl", "Woman", "Pregnant", "Boy", "Man", "Granda"]
         if self.boss_fight:

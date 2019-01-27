@@ -178,8 +178,11 @@ class Enemy(Sprite):
         self.attack_length = settings.enemy_attack_length
         self.btn_ctx = {'up': False, 'down': False, 'left': False, 'right': False, 'a': False, 'b': False}
         self.veldiff = settings.enemy_veldiff
-        self.spritesheet_positions = [(spritesheet_positions[0][0],
-                                       random.randrange(0, 6) * 32)]
+        if not isinstance(self, Boss):
+            self.spritesheet_positions = [(spritesheet_positions[0][0],
+                                           random.randrange(0, 6) * 32)]
+        else:
+            self.spritesheet_positions = [(128, 0)]
 
         # add 2nd walking animation
         walk_anim_2_y = self.spritesheet_positions[0][1] + self.height
@@ -237,7 +240,7 @@ class Enemy(Sprite):
 class Baby(Enemy):
     """ Gamepad player class """
     def __init__(self, id, xpos, ypos, imagebank=0,
-                 spritesheet_positions=[(48, 32)], attack_sprite_position=(64, 64), width=16,
+                 spritesheet_positions=[(48, 32)], attack_sprite_position=(128, 64), width=16,
                  height=16, spritesheet_keycol=0, mass=1, momentum=1, velocity=(0, 0), player_num=1):
         super().__init__(id, xpos, ypos, imagebank, spritesheet_positions, attack_sprite_position, width, height,
                          spritesheet_keycol, mass, momentum, velocity)
@@ -255,7 +258,7 @@ class Baby(Enemy):
 class Girl(Enemy):
     """ Gamepad player class """
     def __init__(self, id, xpos, ypos, imagebank=0,
-                 spritesheet_positions=[(16, 64)], attack_sprite_position=(64, 64), width=16, height=16,
+                 spritesheet_positions=[(16, 64)], attack_sprite_position=(128, 32), width=16, height=16,
                  spritesheet_keycol=0, mass=1, momentum=1, velocity=(0, 0), player_num=1):
         super().__init__(id, xpos, ypos, imagebank, spritesheet_positions, attack_sprite_position, width, height,
                          spritesheet_keycol, mass, momentum, velocity)
@@ -273,7 +276,7 @@ class Girl(Enemy):
 class Woman(Enemy):
     """ Gamepad player class """
     def __init__(self, id, xpos, ypos, imagebank=0,
-                 spritesheet_positions=[(32, 64)], attack_sprite_position=(64, 64), width=16, height=16,
+                 spritesheet_positions=[(32, 64)], attack_sprite_position=(128, 48), width=16, height=16,
                  spritesheet_keycol=0, mass=1, momentum=1, velocity=(0, 0), player_num=1):
         super().__init__(id, xpos, ypos, imagebank, spritesheet_positions, attack_sprite_position, width, height,
                          spritesheet_keycol, mass, momentum, velocity)
@@ -291,7 +294,7 @@ class Woman(Enemy):
 class Pregnant(Enemy):
     """ Gamepad player class """
     def __init__(self, id, xpos, ypos, imagebank=0,
-                 spritesheet_positions=[(64, 64)], attack_sprite_position=(64, 64), width=16, height=16,
+                 spritesheet_positions=[(64, 64)], attack_sprite_position=(128, 80), width=16, height=16,
                  spritesheet_keycol=0, mass=1, momentum=1, velocity=(0, 0), player_num=1):
         super().__init__(id, xpos, ypos, imagebank, spritesheet_positions, attack_sprite_position, width, height,
                          spritesheet_keycol, mass, momentum, velocity)
@@ -309,7 +312,7 @@ class Pregnant(Enemy):
 class Boy(Enemy):
     """ Gamepad player class """
     def __init__(self, id, xpos, ypos, imagebank=0,
-                 spritesheet_positions=[(80, 64)], attack_sprite_position=(64, 64), width=16, height=16,
+                 spritesheet_positions=[(80, 64)], attack_sprite_position=(128, 96), width=16, height=16,
                  spritesheet_keycol=0, mass=1, momentum=1, velocity=(0, 0), player_num=1):
         super().__init__(id, xpos, ypos, imagebank, spritesheet_positions, attack_sprite_position, width, height,
                          spritesheet_keycol, mass, momentum, velocity)
@@ -327,7 +330,7 @@ class Boy(Enemy):
 class Man(Enemy):
     """ Gamepad player class """
     def __init__(self, id, xpos, ypos, imagebank=0,
-                 spritesheet_positions=[(96, 64)], attack_sprite_position=(64, 64), width=16, height=16,
+                 spritesheet_positions=[(96, 64)], attack_sprite_position=(128, 112), width=16, height=16,
                  spritesheet_keycol=0, mass=1, momentum=1, velocity=(0, 0), player_num=1):
         super().__init__(id, xpos, ypos, imagebank, spritesheet_positions, attack_sprite_position, width, height,
                          spritesheet_keycol, mass, momentum, velocity)
@@ -345,7 +348,7 @@ class Man(Enemy):
 class Granda(Enemy):
     """ Gamepad player class """
     def __init__(self, id, xpos, ypos, imagebank=0,
-                 spritesheet_positions=[(112, 64)], attack_sprite_position=(64, 64), width=16, height=16,
+                 spritesheet_positions=[(112, 64)], attack_sprite_position=(128, 128), width=16, height=16,
                  spritesheet_keycol=0, mass=1, momentum=1, velocity=(0, 0), player_num=1):
         super().__init__(id, xpos, ypos, imagebank, spritesheet_positions, attack_sprite_position, width, height,
                          spritesheet_keycol, mass, momentum, velocity)
@@ -359,10 +362,11 @@ class Granda(Enemy):
         self.btn_ctx = {'up': False, 'down': False, 'left': False, 'right': False, 'a': False, 'b': False}
         self.veldiff = settings.enemy_veldiff + 50
 
+
 class Boss(Enemy):
     """ Gamepad player class """
     def __init__(self, id, xpos, ypos, imagebank=0,
-                 spritesheet_positions=[(112, 64)], attack_sprite_position=(64, 64), width=16, height=16,
+                 spritesheet_positions=[(128, 0)], attack_sprite_position=(64, 64), width=16, height=16,
                  spritesheet_keycol=0, mass=1, momentum=1, velocity=(0, 0), player_num=1):
         super().__init__(id, xpos, ypos, imagebank, spritesheet_positions, attack_sprite_position, width, height,
                          spritesheet_keycol, mass, momentum, velocity, max_health=settings.boss_max_health)
@@ -371,7 +375,8 @@ class Boss(Enemy):
         self.poly.collision_type = 1
         self.player_num = player_num
         self.facing = 'left'
-        self.attack_power = settings.enemy_attack_power + 3
+        self.attack_power = settings.boss_attack_power
         self.attack_length = settings.enemy_attack_length
         self.btn_ctx = {'up': False, 'down': False, 'left': False, 'right': False, 'a': False, 'b': False}
-        self.veldiff = settings.enemy_veldiff + 50
+        self.veldiff = settings.enemy_veldiff + 150
+        self.attack_frames = pymunk.inf
