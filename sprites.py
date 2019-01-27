@@ -133,7 +133,7 @@ class Player(Sprite):
             self.body.apply_impulse_at_local_point((-self.veldiff, 0), (0, 0))
         if pyxel.btn(pyxel.KEY_A) or pyxel.btn(getattr(pyxel, f"GAMEPAD_{num}_A")):
             logger.error(f"{self.id} attacking!")
-            self.attack_frames += self.attack_length
+            self.attack_frames = self.attack_length
         if pyxel.btn(pyxel.KEY_B) or pyxel.btn(getattr(pyxel, f"GAMEPAD_{num}_B")):
             self.useitem()
 
@@ -178,7 +178,7 @@ class Enemy(Sprite):
             self.btn_ctx['left'] = True
             self.facing = 'left'
         elif buttonName == 'a':
-            self.attack_frames += self.attack_length
+            self.attack_frames = self.attack_length
         elif buttonName == 'b':
             self.useitem()
 
