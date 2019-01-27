@@ -177,6 +177,9 @@ class Game:
         self.space.step(settings.space_dt)
         logger.debug(f"BODIES:{self.space.bodies}")
 
+        if len(self.enemies) < setting.required_enemies:
+            pyxel.frame_count = 0
+
     def draw(self):
         """ draw game to canvas """
         pyxel.text(10, 5, "Granny Punch Up", 14)

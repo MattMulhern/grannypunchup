@@ -14,6 +14,7 @@ enemy_attack_length = 1
 player_attack_length = 1
 player_attack_power = 5
 enemy_attack_power = 5
+required_enemies = 1
 
 death_duration = 30
 det_wall_dmg = 1
