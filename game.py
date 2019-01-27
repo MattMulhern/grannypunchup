@@ -63,13 +63,14 @@ class Game:
         self.space.add(death_wall.body, death_wall.poly)
 
         logger.info("game initialized.")
-        self.players = {"Anna": Player("Anna", 50, 100,
+        start_y = 50
+        self.players = {"Anna": Player("Anna", 53, start_y,
                                        spritesheet_positions=[(0, 0)], velocity=(0, 0), player_num=1),
-                        "Betrice": Player("Betrice", 10, 100,
+                        "Betrice": Player("Betrice", 63, start_y,
                                           spritesheet_positions=[(0, 48)], velocity=(0, 0), player_num=2),
-                        "Candice": Player("Candice", 100, 10,
+                        "Candice": Player("Candice", 110, start_y,
                                           spritesheet_positions=[(0, 96)], velocity=(0, 0), player_num=3),
-                        "Derp": Player("Derp", 100, 50,
+                        "Derp": Player("Derp", 115, start_y,
                                        spritesheet_positions=[(0, 144)], velocity=(0, 0), player_num=4)}
 
         self.dead_grannys = []
@@ -177,7 +178,7 @@ class Game:
         self.space.step(settings.space_dt)
         logger.debug(f"BODIES:{self.space.bodies}")
 
-        if len(self.enemies) < setting.required_enemies:
+        if len(self.enemies) < settings.required_enemies:
             pyxel.frame_count = 0
 
     def draw(self):

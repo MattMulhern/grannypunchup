@@ -1,4 +1,4 @@
-starting_frame = "game"
+starting_frame = "title"
 canvas_x = 255
 canvas_y = 144
 space_dt = 0.02
