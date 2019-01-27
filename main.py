@@ -28,11 +28,15 @@ class App:
         pyxel.init(settings.canvas_x, settings.canvas_y,
                    palette=PALETTE, scale=settings.scale)
 
+        pyxel.load('assets/granny.pyxel')
+        pyxel.play(0, [0, 1], loop=True)
+
         # initialize all frames
         self.title = title.Title()
         self.menu = menu.Menu()
         self.game = game.Game()
         logger.info("App initialized")
+
 
     def run(self):
         pyxel.run(self.update, self.draw)

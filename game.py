@@ -30,9 +30,11 @@ def resolve_player_collision(arbiter, space, data):
     if sprite_a.is_attacking():
         logger.info(f"{sprite_a.id} hit {sprite_b.id} for {sprite_a.attack_power}, {sprite_b.health} left")
         sprite_b.health -= sprite_a.attack_power
+        pyxel.play(1, 0)
     if sprite_b.is_attacking():
         logger.info(f"{sprite_b.id} hit {sprite_a.id} for {sprite_b.attack_power}, {sprite_a.health} left")
         sprite_a.health -= sprite_b.attack_power
+        pyxel.play(1, 0)
 
 
 class Game:
