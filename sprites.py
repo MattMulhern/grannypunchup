@@ -79,7 +79,10 @@ class Sprite:
                       self.spritesheet_keycol)
 
             return
-
+        if self.is_attacking():
+            logger.debug(f"drawing attack frame for {self.id}")
+            s_position = (self.attack_sprite_position[0], self.attack_sprite_position[1])
+            
         pyxel.blt(self.body.position.x,
                   self.body.position.y,
                   self.imagebank,
@@ -189,6 +192,7 @@ class Enemy(Sprite):
         dpos_y = self.spritesheet_positions[0][1]  # TODO: fix for where they really are!
         self.spritesheet_death_position = (dpos_x, dpos_y)
 
+        self.attack_sprite_position = self.spritesheet_positions[0]
     def update(self):
         if pyxel.frame_count % settings.sprite_anim_modulo == 0:
             if self.spritesheet_idx == (len(self.spritesheet_positions) - 1):

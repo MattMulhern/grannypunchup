@@ -10,8 +10,8 @@ scrollspeed = 4
 player_veldiff = 100
 enemy_veldiff = 100
 
-enemy_attack_length = 1
-player_attack_length = 1
+enemy_attack_length = 2
+player_attack_length = 2
 player_attack_power = 5
 enemy_attack_power = 5
 required_enemies = 1
