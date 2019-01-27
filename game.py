@@ -221,15 +221,19 @@ class Game:
         """ GRANDAS  below """
 
         granda_x = -6
-        pyxel.blt(granda_x, 46, 0, 112, 64, 16, 16, 0)
-        pyxel.blt(granda_x, 56, 0, 112, 64, 16, 16, 0)
-        pyxel.blt(granda_x, 66, 0, 112, 64, 16, 16, 0)
-        pyxel.blt(granda_x, 76, 0, 112, 64, 16, 16, 0)
-        pyxel.blt(granda_x, 86, 0, 112, 64, 16, 16, 0)
-        pyxel.blt(granda_x, 96, 0, 112, 64, 16, 16, 0)
-        pyxel.blt(granda_x, 106, 0, 112, 64, 16, 16, 0)
-        pyxel.blt(granda_x, 116, 0, 112, 64, 16, 16, 0)
-        pyxel.blt(granda_x, 126, 0, 112, 64, 16, 16, 0)
+        if pyxel.frame_count % 2 == 0:
+            offset = 16
+        else:
+            offset = 0
+        pyxel.blt(granda_x, 46, 0, 112, 64 + offset, 16, 16, 0)
+        pyxel.blt(granda_x, 56, 0, 112, 64 + offset, 16, 16, 0)
+        pyxel.blt(granda_x, 66, 0, 112, 64 + offset, 16, 16, 0)
+        pyxel.blt(granda_x, 76, 0, 112, 64 + offset, 16, 16, 0)
+        pyxel.blt(granda_x, 86, 0, 112, 64 + offset, 16, 16, 0)
+        pyxel.blt(granda_x, 96, 0, 112, 64 + offset, 16, 16, 0)
+        pyxel.blt(granda_x, 106, 0, 112, 64 + offset, 16, 16, 0)
+        pyxel.blt(granda_x, 116, 0, 112, 64 + offset, 16, 16, 0)
+        pyxel.blt(granda_x, 126, 0, 112, 64 + offset, 16, 16, 0)
 
     def handle_disconnect_event(self, sid):
         if sid in self.enemies.keys():
