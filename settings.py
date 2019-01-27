@@ -15,9 +15,9 @@ player_attack_length = 2
 player_attack_power = 5
 enemy_attack_power = 5
 required_enemies = 1
-boss_attack_power = 20
+boss_attack_power = 15
 
 death_duration = 60
 det_wall_dmg = 0.5
-player_max_health = 500
-boss_max_health=300
+player_max_health = 2000
+boss_max_health = 300

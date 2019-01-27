@@ -131,6 +131,7 @@ class Game:
         self.draw_csv('assets/Level_walls.csv', offset)
         self.draw_csv('assets/Level_carpet.csv', offset)
         self.draw_csv('assets/Level_objects.csv', offset)
+        self.draw_csv('assets/Level_objects2.csv', offset)
 
     def update(self):
         if pyxel.btnp(pyxel.KEY_R):
