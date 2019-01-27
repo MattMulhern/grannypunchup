@@ -27,9 +27,16 @@ class Game:
     """ Class used for game """
 
     def __init__(self, fps=1):
-        pyxel.image(0).load(0, 0, "assets/villagers.png")
+        pyxel.image(0).load(0, 0, "assets/villagers-export.png")
         pyxel.image(1).load(0, 0, "assets/16X16-export.png")
         self._init_space()
+        lines = []
+        body = pymunk.Body(body_type=pymunk.Body.STATIC)
+        for x in [z for z in range(0, 41)] + [z for z in range(158, 166)]:
+            lines.append(pymunk.Segment(body, (0, x), (255, x), 30))
+        for line in lines:
+            self.space.add(line)
+
         logger.info("game initialized.")
         self.players = {"Anna": Player("Anna", 50, 100, velocity=(0, 0), player_num=1),
                         "Betrice": Player("Betrice", 10, 100, velocity=(0, 0), player_num=2),
@@ -44,20 +51,19 @@ class Game:
 
     def _init_space(self):
         """ gravity, canvas etc """
-        self.space = pymunk.Space()
+        self.space = pymunk.Space(threaded=True)
         self.space.damping = settings.space_damping
         self.colhandler = self.space.add_collision_handler(1, 1)
         self.colhandler.post_solve = resolve_player_collision
         self.space.damping = settings.space_damping
 
-    def draw_csv(self, csv_file, offset):
+    def draw_csv(self, csv_file, offset, object=False):
         with open(csv_file) as csv_map:
             csv_reader = csv.reader(csv_map, delimiter=',')
             y_pos = 0
             for row in csv_reader:
                 x_pos = 0
                 for value in row[0 + offset:32 + offset]:
-
                     y = (int(value) // 32)
                     x = (int(value) % 32)
                     pyxel.blt(x_pos, y_pos, 1, x * 8, y * 8, 8, 8, 0)
@@ -65,7 +71,7 @@ class Game:
                 y_pos += 8
 
     def draw_level(self):
-        offset = pyxel.frame_count // 15
+        offset = pyxel.frame_count // settings.scrollspeed
         self.draw_csv('assets/Level_floor.csv', offset)
         self.draw_csv('assets/Level_walls.csv', offset)
         self.draw_csv('assets/Level_carpet.csv', offset)
