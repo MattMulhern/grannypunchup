@@ -358,3 +358,20 @@ class Granda(Enemy):
         self.attack_length = settings.enemy_attack_length
         self.btn_ctx = {'up': False, 'down': False, 'left': False, 'right': False, 'a': False, 'b': False}
         self.veldiff = settings.enemy_veldiff + 50
+
+class Boss(Enemy):
+    """ Gamepad player class """
+    def __init__(self, id, xpos, ypos, imagebank=0,
+                 spritesheet_positions=[(112, 64)], attack_sprite_position=(64, 64), width=16, height=16,
+                 spritesheet_keycol=0, mass=1, momentum=1, velocity=(0, 0), player_num=1):
+        super().__init__(id, xpos, ypos, imagebank, spritesheet_positions, attack_sprite_position, width, height,
+                         spritesheet_keycol, mass, momentum, velocity, max_health=settings.boss_max_health)
+
+        self.poly = pymunk.Circle(self.body, (self.width / 2), offset=(0, 0))
+        self.poly.collision_type = 1
+        self.player_num = player_num
+        self.facing = 'left'
+        self.attack_power = settings.enemy_attack_power + 3
+        self.attack_length = settings.enemy_attack_length
+        self.btn_ctx = {'up': False, 'down': False, 'left': False, 'right': False, 'a': False, 'b': False}
+        self.veldiff = settings.enemy_veldiff + 50

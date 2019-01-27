@@ -6,7 +6,7 @@ import settings
 import csv
 import random
 
-from sprites import Player, Enemy, Baby, Girl, Woman, Pregnant, Boy, Man, Granda
+from sprites import Player, Enemy, Baby, Girl, Woman, Pregnant, Boy, Man, Granda, Boss
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
@@ -85,6 +85,7 @@ class Game:
 
         self.boss_fight = False
         self.boss_dead = False
+        self.boss_added = False
         self.running = False
 
     def _init_space(self):
@@ -139,7 +140,9 @@ class Game:
             self.reset()
         if pyxel.btnp(pyxel.KEY_B):
             self.boss_dead = True
-
+        if pyxel.btnp(pyxel.KEY_Z):
+            self.add_boss()
+        
         self.flushingEnemies = True
         enemies = self.new_enemies
         self.new_enemies = []
@@ -176,6 +179,22 @@ class Game:
                     enemy.dead = True
             elif enemy.health <= 0:
                 enemy.death_frames = settings.death_duration
+
+        if self.boss_added:
+            logger.debug(f"boss has {self.boss.health} health!")
+            self.boss.update()
+            if self.boss.dead:
+                logger.debug(f"{self.boss.id} is dead!")
+                objs_to_kill.append(self.boss)
+            elif self.boss.death_frames > 0:
+                logger.debug(f"{self.boss.id} is dying! {self.boss.death_frames}")
+                self.boss.death_frames -= 1
+                if self.boss.death_frames <= 0:
+                    logger.debug(f"{self.boss.id} TRUE DEATH! {self.boss.death_frames}")
+                    self.boss.dead = True
+                    self.boss_dead = True
+            elif self.boss.health <= 0:
+                self.boss.death_frames = settings.death_duration
 
         for obj in objs_to_kill:
             self.kill(obj)
@@ -221,7 +240,12 @@ class Game:
             logger.error('reached enemy limit, ignoring request')
         else:
             self.add_new_enemy(sid, data)
-
+    
+    def add_boss(self):
+        self.boss = Boss("Supervisor", 100, 100, spritesheet_positions=[(0, 0)], velocity=(0, 0))
+        self.boss_added = True
+        self.space.add(self.boss.body, self.boss.poly)
+        
     def add_new_enemy(self, sid, data):
         class_list = ["Baby", "Girl", "Woman", "Pregnant", "Boy", "Man", "Granda"]
         enemy_class = random.choice(class_list)
@@ -270,6 +294,8 @@ class Game:
         if isinstance(obj, Player):
             self.dead_grannys.append(obj)  # track player deaths
             del(self.players[obj.id])
+        elif isinstance(obj, Boss):
+            del(self.boss)
         elif isinstance(obj, Enemy):
             del(self.enemies[obj.id])
         self.space.remove(obj.body)
