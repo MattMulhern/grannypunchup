@@ -4,8 +4,10 @@ import sys
 import pyxel
 import settings
 import csv
+import random
 
 from sprites import Player, Enemy
+# from sprites import Player, Enemy, Baby, Girl, Woman, Pregnant, Boy, Man, Granda
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
@@ -26,6 +28,7 @@ def resolve_player_collision(arbiter, space, data):
     if sprite_b.is_attacking():
         logger.info(f"{sprite_b.id} hit {sprite_a.id} for {sprite_b.attack_power}, {sprite_a.health} left")
         sprite_a.health -= sprite_b.attack_power
+
 
 class Game:
     """ Class used for game """
@@ -181,7 +184,31 @@ class Game:
             self.add_new_enemy(sid, data)
 
     def add_new_enemy(self, sid, data):
-        newEnemy = Enemy(sid, 100, 50, velocity=(0, 0))
+        class_list = ["Enemy"]
+        # class_list = ["Baby", "Girl", "Woman", "Pregnant", "Boy", "Man", "Granda"]
+        enemy_class = random.choice(class_list)
+        if enemy_class == "Player":
+            newEnemy = Player(sid, 100, 50, velocity=(0, 0))
+        elif enemy_class == "Enemy":
+            newEnemy = Enemy(sid, 100, 50, velocity=(0, 0))
+        # elif enemy_class == "Baby":
+        #     newEnemy = Baby(sid, 100, 50, velocity=(0, 0))
+        # elif enemy_class == "Girl":
+        #     newEnemy = Girl(sid, 100, 50, velocity=(0, 0))
+        # elif enemy_class == "Woman":
+        #     newEnemy = Woman(sid, 100, 50, velocity=(0, 0))
+        # elif enemy_class == "Pregnant":
+        #     newEnemy = Pregnant(sid, 100, 50, velocity=(0, 0))
+        # elif enemy_class == "Boy":
+        #     newEnemy = Boy(sid, 100, 50, velocity=(0, 0))
+        # elif enemy_class == "Man":
+        #     newEnemy = Man(sid, 100, 50, velocity=(0, 0))
+        # elif enemy_class == "Granda":
+        #     newEnemy = Granda(sid, 100, 50, velocity=(0, 0))
+        else:
+            logger.error(f"add_new_enemy: could not find class {enemy_class}")
+            return False
+
         # self.enemies[sid] = data
         while self.flushingEnemies:
             pass
