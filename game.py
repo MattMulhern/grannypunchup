@@ -63,7 +63,20 @@ class Game:
         self.colhandler.post_solve = resolve_player_collision
         self.space.damping = settings.space_damping
 
-    def draw_csv(self, csv_file, offset, object=False):
+    def reset(self):
+        objs_to_kill = []
+        for player in self.players.values():
+            objs_to_kill.append(player)
+        for enemy in self.enemies.values():
+            objs_to_kill.append(enemy)
+
+        for obj in objs_to_kill:
+            self.kill(obj)    
+        self.dead_grannys = []
+        pyxel.frame_count = 0
+        self.__init__()
+
+    def draw_csv(self, csv_file, offset):
         with open(csv_file) as csv_map:
             csv_reader = csv.reader(csv_map, delimiter=',')
             y_pos = 0
@@ -84,6 +97,11 @@ class Game:
         self.draw_csv('assets/Level_objects.csv', offset)
 
     def update(self):
+        if pyxel.btnp(pyxel.KEY_R):
+            logger.info("Exit.")
+            # pyxel.quit()
+            self.reset()
+
         self.flushingEnemies = True
         enemies = self.new_enemies
         self.new_enemies = []
