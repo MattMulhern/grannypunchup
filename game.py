@@ -6,8 +6,8 @@ import settings
 import csv
 import random
 
-from sprites import Player, Enemy
 # from sprites import Player, Enemy, Baby, Girl, Woman, Pregnant, Boy, Man, Granda
+from sprites import Player, Enemy, Baby
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)

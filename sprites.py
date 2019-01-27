@@ -2,10 +2,11 @@ import logging
 import sys
 import pymunk
 import pyxel
+import random
 import settings
 
 logger = logging.getLogger(__name__)
-logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
+logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 
 
 class Sprite:
@@ -175,12 +176,24 @@ class Enemy(Sprite):
         self.attack_length = settings.enemy_attack_length
         self.btn_ctx = {'up': False, 'down': False, 'left': False, 'right': False, 'a': False, 'b': False}
         self.veldiff = settings.enemy_veldiff
+        self.spritesheet_positions = [(spritesheet_positions[0][0],
+                                       random.randrange(0, 6) * 32)]
+
+        # add 2nd walking animation
+        walk_anim_2_y = self.spritesheet_positions[0][1] + self.height
+        walk_anim_2_x = self.spritesheet_positions[0][0]
+        self.spritesheet_positions.append((walk_anim_2_x, walk_anim_2_y))
 
         dpos_x = self.spritesheet_positions[0][0] + self.width  # TODO: fix for where they really are!
         dpos_y = self.spritesheet_positions[0][1]  # TODO: fix for where they really are!
         self.spritesheet_death_position = (dpos_x, dpos_y)
 
     def update(self):
+        if pyxel.frame_count % settings.sprite_anim_modulo == 0:
+            if self.spritesheet_idx == (len(self.spritesheet_positions) - 1):
+                self.spritesheet_idx = 0
+            else:
+                self.spritesheet_idx += 1
         if self.btn_ctx['up']:
             self.body.apply_impulse_at_local_point((0, -self.veldiff), (0, 0))
         if self.btn_ctx['down']:
@@ -217,3 +230,40 @@ class Enemy(Sprite):
         elif buttonName == 'left':
             self.btn_ctx['left'] = False
             self.facing = 'left'
+
+
+class Baby(Enemy):
+    """ Gamepad player class """
+    def __init__(self, id, xpos, ypos, imagebank=0,
+                 spritesheet_positions=[(48, 32)], attack_sprite_position=(64, 64), width=16,
+                 height=16, spritesheet_keycol=0, mass=1, momentum=1, velocity=(0, 0), player_num=1):
+        super().__init__(id, xpos, ypos, imagebank, spritesheet_positions, attack_sprite_position, width, height,
+                         spritesheet_keycol, mass, momentum, velocity)
+
+        print(self.spritesheet_positions)
+        self.poly = pymunk.Circle(self.body, (self.width / 2), offset=(0, 0))
+        self.poly.collision_type = 1
+        self.player_num = player_num
+        self.facing = 'left'
+        self.attack_power = settings.enemy_attack_power
+        self.attack_length = settings.enemy_attack_length
+        self.btn_ctx = {'up': False, 'down': False, 'left': False, 'right': False, 'a': False, 'b': False}
+        self.veldiff = settings.enemy_veldiff + 120
+
+
+class Girl(Enemy):
+    """ Gamepad player class """
+    def __init__(self, id, xpos, ypos, imagebank=0,
+                 spritesheet_positions=[(32, 64)], attack_sprite_position=(64, 64), width=16, height=16,
+                 spritesheet_keycol=0, mass=1, momentum=1, velocity=(0, 0), player_num=1):
+        super().__init__(id, xpos, ypos, imagebank, spritesheet_positions, attack_sprite_position, width, height,
+                         spritesheet_keycol, mass, momentum, velocity)
+
+        self.poly = pymunk.Circle(self.body, (self.width / 2), offset=(0, 0))
+        self.poly.collision_type = 1
+        self.player_num = player_num
+        self.facing = 'left'
+        self.attack_power = settings.enemy_attack_power
+        self.attack_length = settings.enemy_attack_length
+        self.btn_ctx = {'up': False, 'down': False, 'left': False, 'right': False, 'a': False, 'b': False}
+        self.veldiff = settings.enemy_veldiff + 70
