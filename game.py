@@ -14,7 +14,7 @@ logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 def resolve_player_collision(arbiter, space, data):
     sprite_a = arbiter.shapes[0].body.sprite
     sprite_b = arbiter.shapes[1].body.sprite
-    # logger.debug(f"{sprite_a.id} is colliding with {sprite_b.id}")
+    logger.debug(f"{sprite_a.id} is colliding with {sprite_b.id}")
     if sprite_a.is_attacking():
         logger.info(f"{sprite_a.id} hit {sprite_b.id} for {sprite_a.attack_power}, {sprite_b.health} left")
         sprite_b.health -= sprite_a.attack_power
@@ -34,8 +34,18 @@ class Game:
         body = pymunk.Body(body_type=pymunk.Body.STATIC)
         for x in [z for z in range(0, 41)] + [z for z in range(158, 166)]:
             lines.append(pymunk.Segment(body, (0, x), (255, x), 30))
+        lines.append(pymunk.Segment(body, (-25, 0), (-25, 144), 30))
+        lines.append(pymunk.Segment(body, (265, 0), (265, 144), 30))
         for line in lines:
             self.space.add(line)
+        death_wall = Enemy(0, xpos=0, ypos=0, imagebank=0,
+                           spritesheet_positions=[(3, 57)], attack_sprite_position=(0, 0), width=1,
+                           height=settings.canvas_y, spritesheet_keycol=0, mass=100, momentum=1, velocity=(0, 0),
+                           player_num=1)
+        death_wall.attack_frames = 9999
+        death_wall.poly = pymunk.Segment(body, (0, 0), (0, 144), 3)
+        death_wall.body = pymunk.Segment(body, (0, 0), (0, 144), 3)
+        self.space.add(death_wall.body, death_wall.poly)
 
         logger.info("game initialized.")
         self.players = {"Anna": Player("Anna", 50, 100,
