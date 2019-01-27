@@ -80,6 +80,9 @@ class Game:
         for player in self.players.values():
             self.space.add(player.body, player.poly)
 
+        self.boss_fight = False
+        self.boss_dead = False
+
     def _init_space(self):
         """ gravity, canvas etc """
         self.space = pymunk.Space(threaded=True)
@@ -102,6 +105,10 @@ class Game:
         self.__init__()
 
     def draw_csv(self, csv_file, offset):
+        if offset >= 512 - 32:
+            offset = 512 - 32
+            self.boss_fight = True
+
         with open(csv_file) as csv_map:
             csv_reader = csv.reader(csv_map, delimiter=',')
             y_pos = 0

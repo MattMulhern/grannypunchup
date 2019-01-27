@@ -6,7 +6,7 @@ scale = 6
 max_enemies = 50
 space_damping = 0.0
 sprite_anim_modulo = 8
-scrollspeed = 8
+scrollspeed = 4
 player_veldiff = 100
 enemy_veldiff = 100
 
