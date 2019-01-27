@@ -56,9 +56,9 @@ class Game:
                            player_num=1)
         death_wall.attack_frames = pymunk.inf
         death_wall.health = pymunk.inf
-        death_wall.poly = pymunk.Segment(body, (0, 0), (0, 144), 3)
+        death_wall.poly = pymunk.Segment(body, (0, 0), (0, 144), 10)
         death_wall.poly.collision_type = 1
-        death_wall.body = pymunk.Segment(body, (0, 0), (0, 144), 3)
+        death_wall.body = pymunk.Segment(body, (0, 0), (0, 144), 10)
         death_wall.body.sprite = death_wall
         self.space.add(death_wall.body, death_wall.poly)
 
@@ -189,6 +189,18 @@ class Game:
             player.draw()
         for enemy in self.enemies.values():
             enemy.draw()
+        """ GRANDAS  below """
+
+        granda_x = -6
+        pyxel.blt(granda_x, 46, 0, 112, 64, 16, 16, 0)
+        pyxel.blt(granda_x, 56, 0, 112, 64, 16, 16, 0)
+        pyxel.blt(granda_x, 66, 0, 112, 64, 16, 16, 0)
+        pyxel.blt(granda_x, 76, 0, 112, 64, 16, 16, 0)
+        pyxel.blt(granda_x, 86, 0, 112, 64, 16, 16, 0)
+        pyxel.blt(granda_x, 96, 0, 112, 64, 16, 16, 0)
+        pyxel.blt(granda_x, 106, 0, 112, 64, 16, 16, 0)
+        pyxel.blt(granda_x, 116, 0, 112, 64, 16, 16, 0)
+        pyxel.blt(granda_x, 126, 0, 112, 64, 16, 16, 0)
 
     def handle_disconnect_event(self, sid):
         if sid in self.enemies.keys():
@@ -202,8 +214,7 @@ class Game:
             self.add_new_enemy(sid, data)
 
     def add_new_enemy(self, sid, data):
-        class_list = ["Enemy", "Baby", "Girl"]
-        # class_list = ["Baby", "Girl", "Woman", "Pregnant", "Boy", "Man", "Granda"]
+        class_list = ["Baby", "Girl", "Woman", "Pregnant", "Boy", "Man", "Granda"]
         enemy_class = random.choice(class_list)
         if enemy_class == "Player":
             newEnemy = Player(sid, 100, 50, velocity=(0, 0))
@@ -221,8 +232,8 @@ class Game:
             newEnemy = Boy(sid, 100, 50, velocity=(0, 0))
         elif enemy_class == "Man":
             newEnemy = Man(sid, 100, 50, velocity=(0, 0))
-        # elif enemy_class == "Granda":
-        #     newEnemy = Granda(sid, 100, 50, velocity=(0, 0))
+        elif enemy_class == "Granda":
+            newEnemy = Granda(sid, 100, 50, velocity=(0, 0))
         else:
             logger.error(f"add_new_enemy: could not find class {enemy_class}")
             return False

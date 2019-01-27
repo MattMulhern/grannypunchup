@@ -17,4 +17,4 @@ enemy_attack_power = 5
 required_enemies = 1
 
 death_duration = 30
-det_wall_dmg = 1
+det_wall_dmg = 0.5
