@@ -16,3 +16,4 @@ player_attack_power = 5
 enemy_attack_power = 5
 
 death_duration = 30
+det_wall_dmg = 1

@@ -38,7 +38,7 @@ class Sprite:
         self.equipped = 'nothing'
         self.death_frames = 0
         self.dead = False
-    
+
     def die(self):
         """ for later animation use, should be overloaded """
         pass
@@ -120,7 +120,7 @@ class Player(Sprite):
         self.attack_length = settings.player_attack_length
         self.attack_power = settings.player_attack_power
         self.veldiff = settings.player_veldiff
-        
+
         dpos_x = self.spritesheet_positions[0][0] + self.width  # TODO: fix for where they really are!
         dpos_y = self.spritesheet_positions[0][1]  # TODO: fix for where they really are!
         self.spritesheet_death_position = (dpos_x, dpos_y)
