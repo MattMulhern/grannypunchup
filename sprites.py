@@ -78,10 +78,10 @@ class Sprite:
                       self.spritesheet_keycol)
 
             return
-        if self.is_attacking():
-            logger.debug(f"drawing attack frame for {self.id} ({self.attack_sprite_position})")
+        if self.is_attacking() and not isinstance(self, Boss):
+            logger.debug(f"drawing attack frame for {self.id}")
             s_position = (self.attack_sprite_position[0], self.attack_sprite_position[1])
-            
+
         pyxel.blt(self.body.position.x,
                   self.body.position.y,
                   self.imagebank,
