@@ -16,6 +16,6 @@ player_attack_power = 5
 enemy_attack_power = 5
 required_enemies = 1
 
-death_duration = 30
+death_duration = 60
 det_wall_dmg = 0.5
 player_max_health = 500

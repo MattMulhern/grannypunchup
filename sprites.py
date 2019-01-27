@@ -6,7 +6,7 @@ import random
 import settings
 
 logger = logging.getLogger(__name__)
-logging.basicConfig(stream=sys.stdout, level=logging.INFO)
+logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 
 
 class Sprite:
@@ -39,7 +39,6 @@ class Sprite:
         self.equipped = 'nothing'
         self.death_frames = 0
         self.dead = False
-
     def die(self):
         """ for later animation use, should be overloaded """
         pass
@@ -72,10 +71,10 @@ class Sprite:
             pyxel.blt(self.body.position.x,
                       self.body.position.y,
                       self.imagebank,
-                      self.spritesheet_death_position[0],
-                      self.spritesheet_death_position[1],
+                      s_position[0],
+                      s_position[1],
                       width,
-                      self.height,
+                      -self.height,
                       self.spritesheet_keycol)
 
             return
@@ -128,7 +127,6 @@ class Player(Sprite):
 
         dpos_x = self.spritesheet_positions[0][0] + self.width  # TODO: fix for where they really are!
         dpos_y = self.spritesheet_positions[0][1]  # TODO: fix for where they really are!
-        self.spritesheet_death_position = (dpos_x, dpos_y)
 
         # add 2nd walking animation
         walk_anim_2_y = self.spritesheet_positions[0][1] + self.height
@@ -190,7 +188,6 @@ class Enemy(Sprite):
 
         dpos_x = self.spritesheet_positions[0][0] + self.width  # TODO: fix for where they really are!
         dpos_y = self.spritesheet_positions[0][1]  # TODO: fix for where they really are!
-        self.spritesheet_death_position = (dpos_x, dpos_y)
 
         self.attack_sprite_position = self.spritesheet_positions[0]
     def update(self):
