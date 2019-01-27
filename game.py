@@ -47,7 +47,7 @@ class Game:
         for x in [z for z in range(0, 41)] + [z for z in range(158, 166)]:
             lines.append(pymunk.Segment(body, (0, x), (255, x), 30))
         lines.append(pymunk.Segment(body, (-25, 0), (-25, 144), 30))
-        lines.append(pymunk.Segment(body, (265, 0), (265, 144), 30))
+        # lines.append(pymunk.Segment(body, (265, 0), (265, 144), 30))
         for line in lines:
             self.space.add(line)
         death_wall = Enemy(0, xpos=0, ypos=0, imagebank=0,
@@ -135,6 +135,8 @@ class Game:
             logger.info("Exit.")
             # pyxel.quit()
             self.reset()
+        if pyxel.btnp(pyxel.KEY_B):
+            self.boss_dead = True
 
         self.flushingEnemies = True
         enemies = self.new_enemies
@@ -147,7 +149,7 @@ class Game:
         """ update game objects """
         objs_to_kill = []
         for player in self.players.values():
-            player.update()
+            player.update(boss_dead=self.boss_dead)
             if player.dead:
                 logger.debug(f"{player.id} is dead!")
                 objs_to_kill.append(player)
@@ -183,6 +185,7 @@ class Game:
             pyxel.frame_count = 0
         else:
             self.running = True
+
 
     def draw(self):
         """ draw game to canvas """

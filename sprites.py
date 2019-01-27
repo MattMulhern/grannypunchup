@@ -137,7 +137,7 @@ class Player(Sprite):
         attack_anim_y = self.spritesheet_positions[0][1] + (self.height * 2)
         self.attack_sprite_position = (attack_anim_x, attack_anim_y)
 
-    def update(self):
+    def update(self, boss_dead):
         num = self.player_num
         if pyxel.frame_count % settings.sprite_anim_modulo == 0:
             if self.spritesheet_idx == (len(self.spritesheet_positions) - 1):
@@ -149,7 +149,7 @@ class Player(Sprite):
             self.body.apply_impulse_at_local_point((0, - self.veldiff), (0, 0))
         if pyxel.btn(pyxel.KEY_DOWN) or pyxel.btn(getattr(pyxel, f"GAMEPAD_{num}_DOWN")):
             self.body.apply_impulse_at_local_point((0, self.veldiff), (0, 0))
-        if pyxel.btn(pyxel.KEY_RIGHT) or pyxel.btn(getattr(pyxel, f"GAMEPAD_{num}_RIGHT")):
+        if pyxel.btn(pyxel.KEY_RIGHT) or pyxel.btn(getattr(pyxel, f"GAMEPAD_{num}_RIGHT")) or boss_dead:
             self.facing = 'right'
             self.body.apply_impulse_at_local_point((self.veldiff, 0), (0, 0))
         if pyxel.btn(pyxel.KEY_LEFT) or pyxel.btn(getattr(pyxel, f"GAMEPAD_{num}_LEFT")):
