@@ -101,6 +101,10 @@ def on_release(sid, data):
 def on_ready(sid, data):
     pyxel_app.game.handle_connect_event(sid, data)
 
+@sio.on('disconnect')
+def on_disconnect(sid):
+    pyxel_app.game.handle_disconnect_event(sid)
+
 
 def say_hello(request):
     return web.Response(text='Hello, world')

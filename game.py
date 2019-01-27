@@ -135,6 +135,10 @@ class Game:
         for enemy in self.enemies.values():
             enemy.draw()
 
+    def handle_disconnect_event(self, sid):
+        if sid in self.enemies.keys():
+            self.kill(self.enemies[sid])
+        
     def handle_connect_event(self, sid, data):
         logger.debug(f"handling connect for {sid}")
         if len(self.enemies.keys()) > settings.max_enemies:
