@@ -79,7 +79,7 @@ class Sprite:
 
             return
         if self.is_attacking():
-            logger.debug(f"drawing attack frame for {self.id}")
+            logger.debug(f"drawing attack frame for {self.id} ({self.attack_sprite_position})")
             s_position = (self.attack_sprite_position[0], self.attack_sprite_position[1])
             
         pyxel.blt(self.body.position.x,
@@ -133,6 +133,7 @@ class Player(Sprite):
         walk_anim_2_x = self.spritesheet_positions[0][0]
         self.spritesheet_positions.append((walk_anim_2_x, walk_anim_2_y))
 
+        # attack position
         attack_anim_x = self.spritesheet_positions[0][0]
         attack_anim_y = self.spritesheet_positions[0][1] + (self.height * 2)
         self.attack_sprite_position = (attack_anim_x, attack_anim_y)
@@ -189,10 +190,10 @@ class Enemy(Sprite):
         walk_anim_2_x = self.spritesheet_positions[0][0]
         self.spritesheet_positions.append((walk_anim_2_x, walk_anim_2_y))
 
-        dpos_x = self.spritesheet_positions[0][0] + self.width  # TODO: fix for where they really are!
-        dpos_y = self.spritesheet_positions[0][1]  # TODO: fix for where they really are!
+        # dpos_x = self.spritesheet_positions[0][0] + self.width  # TODO: fix for where they really are!
+        # dpos_y = self.spritesheet_positions[0][1]  # TODO: fix for where they really are!
 
-        self.attack_sprite_position = self.spritesheet_positions[0]
+        # self.attack_sprite_position = self.spritesheet_positions[0]
     def update(self):
         if pyxel.frame_count % settings.sprite_anim_modulo == 0:
             if self.spritesheet_idx == (len(self.spritesheet_positions) - 1):
